@@ -4,6 +4,9 @@ h3 {
     font-family: "Poppins", sans-serif;
 }
 
-.sidebar{
-    width: 50%;
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .dash-btn{
+        width: 100%;
+    }
 }
