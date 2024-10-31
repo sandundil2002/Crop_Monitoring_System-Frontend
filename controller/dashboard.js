@@ -1,4 +1,4 @@
-$("#btn-signout").click(function (e) {
+$(".btn-signout").click(function () {
   swal({
     title: "Are you sure?",
     text: "Do you want to signout this system!",
