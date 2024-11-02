@@ -4,9 +4,34 @@ h3 {
     font-family: "Poppins", sans-serif;
 }
 
-
 @media screen and (min-width: 992px) and (max-width: 1199px) {
     .dash-btn{
         width: 100%;
+    }
+}
+
+#mainContentFrame {
+    height: 90vh;
+}
+
+@media (max-width: 767px) {
+    #content-wrapper {
+        padding-top: 4rem;
+    }
+
+    #mainContentFrame {
+        height: 90vh;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    #mainContentFrame {
+        height: 90vh;
+    }
+}
+
+@media (min-width: 992px) {
+    #mainContentFrame {
+        height: 95vh;
     }
 }

@@ -12,16 +12,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
-<body">
+<body>
     <!-- Title -->
     <div class="title-section p-4 mb-4 bg-white rounded shadow-sm">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
             <div>
                 <h2 class="fw-bold mb-1">Field Management</h2>
-                <p class="text-muted mb-0">Manage all field data, including locations, crop allocations, and staff assignments.</p>
+                <p class="text-muted mb-0">Manage all field data, including locations, crop allocations, and staff
+                    assignments.</p>
             </div>
             <div class="mt-3 mt-md-0">
-                <button class="btn btn-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addFieldModal">
+                <button class="btn btn-success d-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#addFieldModal">
                     <box-icon name='plus-circle' class="me-1" color='#ffffff'></box-icon>Add Field
                 </button>
             </div>
@@ -34,18 +36,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="addFieldModalLabel">Add New Field</h5>
-                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addFieldForm">
                         <div class="mb-3">
                             <label for="fieldName" class="form-label">Field Name</label>
-                            <input type="text" class="form-control" id="fieldName" placeholder="Enter field name" required>
+                            <input type="text" class="form-control" id="fieldName" placeholder="Enter field name"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="fieldLocation" class="form-label">Field Location (GPS Coordinates)</label>
-                            <input type="text" class="form-control" id="fieldLocation" placeholder="Enter GPS coordinates"
-                                required>
+                            <input type="text" class="form-control" id="fieldLocation"
+                                placeholder="Enter GPS coordinates" required>
                         </div>
                         <div class="mb-3">
                             <label for="cropType" class="form-label">Crop Type</label>
@@ -90,6 +94,39 @@
         </div>
     </div>
 
+    <!-- Table -->
+    <div class="table-responsive mt-5">
+        <table class="table table-bordered table-hover table-striped align-middle">
+            <thead class="table-success">
+                <tr>
+                    <th>Field Id</th>
+                    <th>Field Name</th>
+                    <th>Location (GPS)</th>
+                    <th>Crop Type</th>
+                    <th>Size (sq. meters)</th>
+                    <th>Staff Member</th>
+                    <th>Field Image 1</th>
+                    <th>Field Image 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>F001</td>
+                    <td>Field 1</td>
+                    <td>37.7749° N, 122.4194° W</td>
+                    <td>Rice</td>
+                    <td>500</td>
+                    <td>S001</td>
+                    <td><img src="path/to/image1.jpg" alt="Field Image 1" class="img-thumbnail"
+                            style="max-width: 100px;">
+                    </td>
+                    <td><img src="path/to/image2.jpg" alt="Field Image 2" class="img-thumbnail"
+                            style="max-width: 100px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <script src="../controller/fields.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -100,6 +137,6 @@
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-</body>
+    </body>
 
 </html>
