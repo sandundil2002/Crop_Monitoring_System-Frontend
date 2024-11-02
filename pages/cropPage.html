@@ -21,9 +21,80 @@
             </div>
             <div class="mt-3 mt-md-0">
                 <button class="btn btn-success d-flex align-items-center" data-bs-toggle="modal"
-                    data-bs-target="#addFieldModal">
-                    <box-icon name='plus-circle' class="me-1" color='#ffffff'></box-icon>Add Field
+                    data-bs-target="#addCropModal">
+                    <box-icon name='plus-circle' class="me-1" color='#ffffff'></box-icon>Add Crop
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCropModal" tabindex="-1" aria-labelledby="addCropModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addCropModalLabel">Add New Crop</h5>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCropForm">
+                        <div class="mb-3">
+                            <label for="fieldType" class="form-label">Field Type</label>
+                            <select class="form-select" id="fieldType" required>
+                                <option selected disabled>Select field type</option>
+                                <option value="F001">Field 1</option>
+                                <option value="F002">Field 2</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cropCommonName" class="form-label">Crop Common Name</label>
+                            <select class="form-select" id="cropCommonName" required>
+                                <option selected disabled>Select crop common name</option>
+                                <option value="Rice">Rice</option>
+                                <option value="Cowpea">Cowpea</option>
+                                <option value="GreenGram">Green gram</option>
+                                <option value="Chickpea">Chickpea</option>
+                                <option value="SweetPotato">Sweet potato</option>
+                                <option value="Reddish">Reddish</option>
+                                <option value="Cassava">Cassava</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cropScientificName" class="form-label">Crop Scientific Name</label>
+                            <input type="text" class="form-control" id="cropScientificName"
+                                placeholder="Please select crop common name" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cropCategory" class="form-label">Crop Category</label>
+                            <select class="form-select" id="cropCategory" required>
+                                <option selected disabled>Select crop category</option>
+                                <option value="Cereal">Cereal</option>
+                                <option value="Legume ">Legume</option>
+                                <option value="Vegetable">Vegetable</option>
+                                <option value="LeafyGreen">Leafy Green</option>
+                                <option value="Fruit">Fruit</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cropSeason" class="form-label">Crop Season</label>
+                            <select class="form-select" id="cropSeason" required>
+                                <option selected disabled>Select crop season</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Autumn">Autumn</option>
+                                <option value="Winter">Winter</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cropImg" class="form-label">Crop Image </label>
+                            <input type="file" class="form-control" id="cropImg" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addFieldForm" class="btn btn-success">Add New Crop</button>
+                </div>
             </div>
         </div>
     </div>
