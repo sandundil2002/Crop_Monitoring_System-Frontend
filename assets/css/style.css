@@ -8,3 +8,11 @@
 .side-bar{
     margin-top: 20%;
 }
+
+#login-form span {
+    cursor: pointer;
+}
+
+#signup-form span {
+    cursor: pointer;
+}
