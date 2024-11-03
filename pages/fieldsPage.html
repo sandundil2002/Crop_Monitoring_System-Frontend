@@ -15,7 +15,7 @@
 
 <body>
     <!-- Title -->
-    <div class="title-section p-4 mb-4 bg-white rounded shadow-sm">
+    <div class="title-section p-4 mb-3 bg-white rounded shadow-sm">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
             <div>
                 <h2 class="fw-bold mb-1">Field Management</h2>
@@ -93,8 +93,31 @@
         </div>
     </div>
 
+    <!-- Search-bar -->
+    <div class="d-flex justify-content-end">
+        <div class="d-flex search-bar">
+            <div class="w-100">
+                <div class="input-group">
+                    <button class="btn btn-outline-success fw-semibold text-start dropdown-toggle w-75 ms-4" type="button"
+                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Search Field By Id
+                    </button>
+                    <ul class="dropdown-menu w-25" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" data-value="F001">F001</a></li>
+                        <li><a class="dropdown-item" href="#" data-value="F002">F002</a></li>
+                        <li><a class="dropdown-item" href="#" data-value="F003">F003</a></li>
+                        <li><a class="dropdown-item" href="#" data-value="F004">F004</a></li>
+                    </ul>
+                    <button class="btn btn-success" type="button" id="btn-search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Table -->
-    <div class="table-responsive mt-5">
+    <div class="table-responsive mt-3">
         <table class="table table-bordered table-hover table-striped align-middle">
             <thead class="table-success">
                 <tr>
@@ -154,11 +177,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="editFieldName" class="form-label">Field Name</label>
-                            <input type="text" class="form-control" id="editFieldName" placeholder="Enter field name" required>
+                            <input type="text" class="form-control" id="editFieldName" placeholder="Enter field name"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="editFieldLocation" class="form-label">Field Location (GPS Coordinates)</label>
-                            <input type="text" class="form-control" id="editFieldLocation" placeholder="Enter GPS coordinates" required>
+                            <input type="text" class="form-control" id="editFieldLocation"
+                                placeholder="Enter GPS coordinates" required>
                         </div>
                         <div class="mb-3">
                             <label for="editCropType" class="form-label">Crop Type</label>
@@ -174,7 +199,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="editFieldSize" class="form-label">Field Size (in sq. meters)</label>
-                            <input type="number" class="form-control" id="editFieldSize" placeholder="Enter field size" required>
+                            <input type="number" class="form-control" id="editFieldSize" placeholder="Enter field size"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="editStaffMem" class="form-label">Staff Member</label>

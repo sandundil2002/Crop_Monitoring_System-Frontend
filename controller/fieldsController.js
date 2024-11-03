@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  $(".dropdown-item").click(function () {
+    var selectedValue = $(this).data("value");
+    $("#dropdownMenuButton").text(selectedValue);
+  });
+
   $("#btn-edit-field").on("click", function () {
     const row = $(this).closest("tr");
     const fieldId = row.find("td:eq(0)").text();
@@ -8,7 +13,7 @@ $(document).ready(function () {
     const fieldSize = row.find("td:eq(4)").text();
     const fieldStaff = row.find("td:eq(5)").text();
     const fieldImg1 = row.find("td:eq(6)").text();
-    const fieldImg2 = row.find("td:eq(7)").text();    
+    const fieldImg2 = row.find("td:eq(7)").text();
 
     $("#editFieldId").val(fieldId);
     $("#editFieldName").val(fieldName);

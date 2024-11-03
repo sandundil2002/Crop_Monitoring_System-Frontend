@@ -29,6 +29,10 @@
     background-color: white;
 }
 
+.search-bar {
+    width: 300px;
+}
+
 .table-responsive {
     overflow-x: auto;
 }
