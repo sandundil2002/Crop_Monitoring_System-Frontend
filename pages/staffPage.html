@@ -28,6 +28,142 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addCropModalLabel">Add New Member</h5>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addStaffForm">
+                        <div class="mb-3">
+                            <label for="staffFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="staffFirstName"
+                                placeholder="Please input staff member first name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="staffLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="staffLastName"
+                                placeholder="Please input staff member last name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="designation" class="form-label">Member Designation</label>
+                            <select class="form-select" id="designation" required>
+                                <option selected disabled>Select member designation</option>
+                                <!-- MANAGER Roles -->
+                                <option value="Farm-Manager">Farm Manager</option>
+                                <option value="Assistant-Farm-Manager">Assistant Farm Manager</option>
+                                <option value="Greenhouse-Manager">Greenhouse Manager</option>
+                                <option value="Supply-Chain-Manager">Supply Chain Manager</option>
+
+                                <!-- ADMINISTRATIVE Roles -->
+                                <option value="Administrative-Assistant">Administrative Assistant</option>
+                                <option value="Administrative-Logistics-Coordinator">Administrative Logistics
+                                    Coordinator</option>
+                                <option value="Administrative-Safety-Officer">Administrative Safety Officer</option>
+
+                                <!-- SCIENTIST Roles -->
+                                <option value="Agric-Scientist">Agric Scientist</option>
+                                <option value="Soil-Scientist">Soil Scientist</option>
+                                <option value="Crop-Scientist">Crop Scientist</option>
+                                <option value="Research-Scientist">Research Scientist</option>
+
+                                <!-- OTHER Roles -->
+                                <option value="Field-Supervisor">Field Supervisor</option>
+                                <option value="Harvesting-Supervisor">Harvesting Supervisor</option>
+                                <option value="Maintenance-Technician">Maintenance Technician</option>
+                                <option value="Quality-Control-Specialist">Quality Control Specialist</option>
+                                <option value="Field-Worker">Field Worker</option>
+                                <option value="Marketing-and-Sales-Representative">Marketing and Sales Representative
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Member Gender</label>
+                            <select class="form-select" id="gender" required>
+                                <option selected disabled>Select member gender type</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dob" class="form-label">Date Of Birth</label>
+                            <input type="date" class="form-select" id="dob" placeholder="Date of birth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressL1" class="form-label">Address Line 01</label>
+                            <input type="text" class="form-control" id="addressL1"
+                                placeholder="Please input member address line 1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressL2" class="form-label">Address Line 02</label>
+                            <input type="text" class="form-control" id="addressL2"
+                                placeholder="Please input member address line 2" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressL3" class="form-label">Address Line 03</label>
+                            <input type="text" class="form-control" id="addressL3"
+                                placeholder="Please input member address line 3" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressL4" class="form-label">Address Line 04</label>
+                            <input type="text" class="form-control" id="addressL4"
+                                placeholder="Please input member address line 4" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressL5" class="form-label">Address Line 05</label>
+                            <input type="text" class="form-control" id="addressL5"
+                                placeholder="Please input member address line 5" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Contact Number</label>
+                            <input type="number" class="form-control" id="mobile"
+                                placeholder="Please input member mobile number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Member Role</label>
+                            <select class="form-select" id="role" required>
+                                <option selected disabled>Select member role type</option>
+                                <option value="MANAGER">Manager</option>
+                                <option value="ADMINISTRATIVE">Administrative</option>
+                                <option value="SCIENTIST">Scientist</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="field" class="form-label">Member Allocated Fields</label>
+                            <select class="form-select" id="field" required>
+                                <option disabled>Select member Allocated Fields</option>
+                                <option value="Field 1">Field 1</option>
+                                <option value="Field 2">Field 2</option>
+                                <option value="Field 3">Field 3</option>
+                            </select>
+                        </div>
+                        <div class="mt-3">
+                            <h6>Selected Fields:</h6>
+                            <ul id="selectedFieldsList"></ul>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehicle" class="form-label">Member Allocated Vehicle</label>
+                            <select class="form-select" id="vehicle" required>
+                                <option disabled>Select member Allocated Vehicle</option>
+                                <option value="Vehicle 1">Vehicle 1</option>
+                                <option value="Vehicle 2">Vehicle 2</option>
+                                <option value="Vehicle 3">Vehicle 3</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addCropForm" class="btn btn-success">Add New Member</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="../controller/staffController.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
