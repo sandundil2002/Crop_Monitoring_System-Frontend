@@ -28,3 +28,26 @@
 .btn-close {
     background-color: white;
 }
+
+.search-bar {
+    width: 300px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table thead {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.img-thumbnail {
+    border-radius: 5px;
+}
