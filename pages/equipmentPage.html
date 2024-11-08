@@ -28,6 +28,77 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addEquipmentModal" tabindex="-1" aria-labelledby="addEquipmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addEquipmentModalLabel">Add New Equipment</h5>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addEquipmentForm">
+                        <div class="mb-3">
+                            <label for="equipmentName" class="form-label">Equipment Name</label>
+                            <select class="form-select" id="equipmentName" required>
+                                <option selected disabled>Select equipment name </option>
+                                <option value="Plough">Plough</option>
+                                <option value="Mamotee">Mamotee</option>
+                                <option value="Shovel">Shovel</option>
+                                <option value="Irrigation-pumps">Irrigation pumps</option>
+                                <option value="Wheelbarrow">Wheelbarrow</option>
+                                <option value="Sprayer">Sprayer</option>
+                                <option value="Axe">Axe</option>
+                                <option value="Chain-saw">Chain saw</option>
+                                <option value="Combine-harvester">Combine harvester</option>
+                                <option value="Seeder">Seeder</option>
+                                <option value="Weeder">Weeder</option>
+                                <option value="Wheel-wrench">Wheel wrench</option>
+                                <option value="Screw-drivers">Screw drivers</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="equipmentType" class="form-label">Equipment Type</label>
+                            <select class="form-select" id="equipmentType" required>
+                                <option selected disabled>Select Equipment type</option>
+                                <option value="Electrical">Electrical</option>
+                                <option value="Mechanical">Mechanical</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Equipment Status</label>
+                            <select class="form-select" id="status" required>
+                                <option selected disabled>Select Equipment status</option>
+                                <option value="Available">Available</option>
+                                <option value="Out-of-service">Out Of Service</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignStaff" class="form-label">Assigned Staff Member</label>
+                            <select class="form-select" id="assignStaff" required>
+                                <option selected disabled>Select allocated staff member</option>
+                                <option value="">S001</option>
+                                <option value="">S002</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignField" class="form-label">Assigned Field Details</label>
+                            <select class="form-select" id="assignField" required>
+                                <option selected disabled>Select allocated field details</option>
+                                <option value="">S001</option>
+                                <option value="">S002</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addEquipmentForm" class="btn btn-success">Add New Equipment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="../controller/equipmentController.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
