@@ -18,6 +18,7 @@ $(".btn-signout").click(function () {
     dangerMode: true,
   }).then((willOut) => {
     if (willOut) {
+      localStorage.removeItem("authToken");
       window.location.href = "../index.html";
     }
   });

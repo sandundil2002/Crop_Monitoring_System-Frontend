@@ -1,3 +1,5 @@
+import { getAllStaff } from "../model/staffModel.js";
+
 $(document).ready(function () {
   $("#field").change(function () {
     $("#field option:selected").each(function () {
@@ -84,4 +86,73 @@ $(document).ready(function () {
 
     $("#editStaffModal").modal("show");
   });
+
+  loadStaffTable();
 });
+
+async function loadStaffTable() {
+  const staffList = await getAllStaff();
+  console.log(staffList);
+
+  staffList.forEach(function (staff) {
+    $(".table").append(
+      "<tr> " +
+        "<td>" +
+        staff.staffId +
+        "</td>" +
+        "<td>" +
+        staff.firstName +
+        " " +
+        staff.lastName +
+        "</td>" +
+        "<td>" +
+        staff.designation +
+        "</td>" +
+        "<td>" +
+        (staff.vehicles || "None") +
+        "</td>" +
+        "<td>" +
+        staff.gender +
+        "</td>" +
+        "<td>" +
+        staff.dateOfBirth +
+        "</td>" +
+        "<td>" +
+        staff.joinedDate +
+        "</td>" +
+        "<td>" +
+        staff.addressLine1 +
+        " " +
+        staff.addressLine2 +
+        " " +
+        staff.addressLine3 +
+        " " +
+        staff.addressLine4 +
+        " " +
+        staff.addressLine5 +
+        "</td>" +
+        "<td>" +
+        staff.mobile +
+        "</td>" +
+        "<td>" +
+        staff.email +
+        "</td>" +
+        "<td>" +
+        staff.role +
+        "</td>" +
+        "<td>" +
+        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-staff' data-staff-id='" +
+        staff.staffId +
+        "' data-bs-toggle='modal' data-bs-target='#editStaffModal'>" +
+        "<i class='bi bi-pencil'></i>" +
+        "</button>" +
+        "<button class='btn btn-outline-danger btn-sm mb-1 btn-delete-staff' data-staff-id='" +
+        staff.staffId +
+        "'>" +
+        "<i class='bi bi-trash'></i>" +
+        "</button>" +
+        "</td>" +
+        "</tr>"
+    );
+  });
+}
