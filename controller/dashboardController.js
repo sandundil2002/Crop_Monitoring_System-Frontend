@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  const token = localStorage.getItem("authToken");
+  console.log(token);
+  
   $(".dash-btn a").on("click", function (event) {
     event.preventDefault();
     const page = $(this).attr("href"); 

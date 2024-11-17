@@ -38,14 +38,14 @@
                             <img src="./assets/images/login/user-pin-regular-48.png" alt="User Icon" class="mb-3">
                             <h1 class="fw-bold">Welcome Back!</h1>
                         </div>
-                        <form>
+                        <div>
                             <div class="mb-3">
-                                <label for="email" class="form-label">User name</label>
-                                <input type="email" class="form-control" id="email" placeholder="Your email address"
+                                <label for="username" class="form-label">User name</label>
+                                <input type="email" class="form-control" id="username" placeholder="Your email address"
                                     required>
                             </div>
                             <div class="mb-3 position-relative">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="loginPassword" class="form-label">Password</label>
                                 <input type="password" class="form-control password" id="loginPassword"
                                     placeholder="Must contain 8 characters" required>
                                 <span
@@ -54,9 +54,9 @@
                                 </span>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-success w-100 mt-3">Sign in</button>
+                                <button type="submit" class="btn btn-success w-100 mt-3" id="userLogIn">Sign in</button>
                             </div>
-                        </form>
+                        </div>
                         <div class="text-center mt-3">
                             <small>Don't have an account?</small>
                             <a href="#" class="fw-semibold ms-1 text-decoration-none">Sign up</a>
@@ -73,14 +73,14 @@
                             <img src="./assets/images/login/user-pin-regular-48.png" alt="User Icon" class="mb-3">
                             <h1 class="fw-bold">Let's Get Started!</h1>
                         </div>
-                        <form>
+                        <div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
                                 <input type="email" class="form-control" id="email" placeholder="Your email address"
                                     required>
                             </div>
                             <div class="mb-3 position-relative">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="signPassword" class="form-label">Password</label>
                                 <input type="password" class="form-control password" id="signPassword"
                                     placeholder="Must contain 8 characters" required>
                                 <span
@@ -98,7 +98,7 @@
                             <div>
                                 <button type="submit" class="btn btn-success w-100 mt-4">Sign up</button>
                             </div>
-                        </form>
+                        </div>
                         <div class="text-center mt-3">
                             <small>Already have an account?</small>
                             <a href="#" class="fw-semibold ms-1 text-decoration-none">Sign in</a>
@@ -109,7 +109,7 @@
         </div>
     </div>
 
-    <script src="./controller/script.js"></script>
+    <script type="module" src="./controller/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
