@@ -1,4 +1,4 @@
-import { userSignIn } from "../model/userModel.js";
+import { userSignIn, userSignUp } from "../model/userModel.js";
 
 $(document).ready(function () {
   $("#signup-form").hide();
@@ -57,6 +57,40 @@ $(document).ready(function () {
         $("#username").val("");
         $("#loginPassword").val("");
         swal("Login failed!", "Invalid credentials! Please try again", "error");
+      });
+  });
+
+  $("#userSignUp").click(function () {
+    const email = $("#email").val();
+    const password = $("#signPassword").val();
+
+    if (!email || !password) {
+      swal("Warning!", "Please fill in both email and password!", "info");
+      return;
+    }
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+    const promise = userSignUp(userData);
+
+    promise
+      .then((response) => {
+        if (response && response.token) {
+          swal("Confirmation!", "User Registration Successfully!", "success");
+          localStorage.setItem("authToken", response.token);
+          window.location.href = "../pages/dashboard.html";
+        }
+      })
+      .catch((error) => {
+        $("#email").val("");
+        $("#signPassword").val("");
+        swal(
+          "Registration failed!",
+          "You are not staff member! Please enter valid email",
+          "error"
+        );
       });
   });
 });
