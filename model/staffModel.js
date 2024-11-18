@@ -1,23 +1,32 @@
-export async function getAllStaff() {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    throw new Error("No authentication token found");
-  }
-  
+const token = localStorage.getItem("authToken");
+const baseUrl = "http://localhost:8080/cms/api/v1/staff";
+
+export function getAllStaff() {
   return $.ajax({
-    url: "http://localhost:8080/cms/api/v1/staff",
+    url: baseUrl,
     method: "GET",
     dataType: "json",
-    // headers: {
-    //   Authorization: "Bearer " + token,
-    // },
-    success: function (response) {
-      console.log(response);
+    headers: {
+      Authorization: `Bearer ` + token,
     },
-    error: function (xhr, status, error) {
-      console.log("Status: " + status);
+
+    error: function (error) {
       console.log("Error: " + error);
-      console.log(xhr.responseText);
+    },
+  });
+}
+
+export function getAllVehicles() {
+  return $.ajax({
+    url: "http://localhost:8080/cms/api/v1/vehicle",
+    method: "GET",
+    dataType: "json",
+    headers: {
+      Authorization: `Bearer ` + token,
+    },
+
+    error: function (error) {
+      console.log("Error: " + error);
     },
   });
 }

@@ -1,4 +1,4 @@
-import { getAllStaff } from "../model/staffModel.js";
+import { getAllStaff, getAllVehicles } from "../model/staffModel.js";
 
 $(document).ready(function () {
   $("#field").change(function () {
@@ -88,6 +88,7 @@ $(document).ready(function () {
   });
 
   loadStaffTable();
+  loadVehicleIds();
 });
 
 async function loadStaffTable() {
@@ -156,3 +157,20 @@ async function loadStaffTable() {
     );
   });
 }
+
+async function loadVehicleIds() {
+  const vehicleList = await getAllVehicles();
+  const vehicleDropdown = $(".vehicleId");
+  vehicleDropdown.empty();
+
+  vehicleDropdown.append(
+    '<option value="" disabled selected>Select a vehicle</option>'
+  );
+
+  vehicleList.forEach(function (vehicle) {
+    vehicleDropdown.append(
+      `<option value="${vehicle.vehicleId}">${vehicle.vehicleId}</option>`
+    );
+  });
+}
+
