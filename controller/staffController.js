@@ -3,6 +3,7 @@ import {
   getAllVehicles,
   saveStaff,
   updateStaff,
+  searchStaff,
   validateUserData,
 } from "../model/staffModel.js";
 
@@ -101,6 +102,61 @@ $(document).ready(function () {
     });
   });
 
+  $("#btnSearch").click(async function () {
+    try {
+      const staffId = $("#dropdownMenuButton").text().trim();
+
+      if (!staffId || staffId === "Search Staff By Id") {
+        swal("Warning!", "Please select a valid staff ID", "warning");
+        return;
+      }
+
+      $("#btnSearch")
+        .html(
+          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+        )
+        .prop("disabled", true);
+
+      const staffDetails = await searchStaff(staffId);
+
+      let staffArray = [];
+      if (staffDetails) {
+        if (Array.isArray(staffDetails)) {
+          staffArray = staffDetails;
+        } else if (typeof staffDetails === "object") {
+          staffArray = [staffDetails];
+        }
+      }
+
+      $("#staffTable").empty();
+
+      if (staffArray.length === 0) {
+        swal("Information", "No staff details found", "info");
+        return;
+      }
+
+      staffArray.forEach(function (staff) {
+        const row = createStaffTableRow(staff);
+        $(".table tbody").append(row);
+      });
+    } catch (error) {
+      console.error("Comprehensive error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
+      swal(
+        "Error",
+        `Failed to retrieve staff details: ${error.message}`,
+        "error"
+      );
+    } finally {
+      $("#btnSearch")
+        .html('<i class="bi bi-search"></i>')
+        .prop("disabled", false);
+    }
+  });
+
   $("#editSelectedFieldsList").on("click", ".remove-btn", function () {
     const valueToRemove = $(this).data("value");
     $(this).parent().remove();
@@ -113,6 +169,7 @@ $(document).ready(function () {
 
   loadStaffTable();
   loadVehicleIds();
+  loadStaffIds();
 });
 
 $(document).on("click", ".btn-edit-staff", function () {
@@ -212,6 +269,35 @@ async function loadStaffTable() {
   });
 }
 
+async function loadStaffIds() {
+  try {
+    const staffList = await getAllStaff();
+    const staffIdDropdown = $("#staffIdList");
+    staffIdDropdown.empty();
+
+    staffList.forEach((staff) => {
+      const staffId = staff.staffId;
+      const listItem = `
+        <li>
+          <a class="dropdown-item" href="#" data-value="${staffId}">
+            ${staffId}
+          </a>
+        </li>
+      `;
+      staffIdDropdown.append(listItem);
+    });
+
+    $("#staffIdList").on("click", ".dropdown-item", function (event) {
+      event.preventDefault();
+      const selectedId = $(this).data("value");
+      $("#dropdownMenuButton").text(selectedId);
+      $("#dropdownMenuButton").data("selected-id", selectedId);
+    });
+  } catch (error) {
+    console.error("Error loading staff IDs:", error);
+  }
+}
+
 async function loadVehicleIds() {
   const vehicleList = await getAllVehicles();
   const vehicleDropdown = $(".vehicleId");
@@ -226,4 +312,48 @@ async function loadVehicleIds() {
       `<option value="${vehicle.vehicleId}">${vehicle.vehicleId}</option>`
     );
   });
+}
+
+function createStaffTableRow(staff) {
+  const safeValue = (value) => value || "N/A";
+
+  const fullAddress = [
+    staff.addressLine1,
+    staff.addressLine2,
+    staff.addressLine3,
+    staff.addressLine4,
+    staff.addressLine5,
+  ]
+    .filter((line) => line && line.trim() !== "")
+    .join(" ");
+
+  return `
+        <tr>
+            <td>${safeValue(staff.staffId)}</td>
+            <td>${safeValue(staff.firstName)} ${safeValue(staff.lastName)}</td>
+            <td>${safeValue(staff.designation)}</td>
+            <td>${safeValue(staff.vehicleId)}</td>
+            <td>${safeValue(staff.gender)}</td>
+            <td>${safeValue(staff.dateOfBirth)}</td>
+            <td>${safeValue(staff.joinedDate)}</td>
+            <td>${fullAddress}</td>
+            <td>${safeValue(staff.mobile)}</td>
+            <td>${safeValue(staff.email)}</td>
+            <td>${safeValue(staff.role)}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <button class='btn btn-outline-primary btn-sm mb-1 mx-1 btn-edit-staff' 
+                            data-staff-id='${staff.staffId}' 
+                            data-bs-toggle='modal' 
+                            data-bs-target='#editStaffModal'>
+                        <i class='bi bi-pencil'></i>
+                    </button>
+                    <button class='btn btn-outline-danger btn-sm mb-1 btn-delete-staff' 
+                            data-staff-id='${staff.staffId}'>
+                        <i class='bi bi-trash'></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
 }

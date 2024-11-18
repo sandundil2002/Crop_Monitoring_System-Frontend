@@ -1,13 +1,13 @@
 const token = localStorage.getItem("authToken");
-const baseUrl = "http://localhost:8080/cms/api/v1/staff/";
+const baseUrl = "http://localhost:8080/cms/api/v1/staff";
 
 export function getAllStaff() {
   return $.ajax({
-    url: "http://localhost:8080/cms/api/v1/staff",
+    url: baseUrl,
     method: "GET",
-    dataType: "json",
+    contentType: "application/json",
     headers: {
-      Authorization: `Bearer ` + token,
+      Authorization: "Bearer " + token,
     },
 
     error: function (error) {
@@ -15,6 +15,7 @@ export function getAllStaff() {
     },
   });
 }
+
 
 export function getAllVehicles() {
   return $.ajax({
@@ -33,7 +34,7 @@ export function getAllVehicles() {
 
 export function saveStaff(staff) {
   return $.ajax({
-    url: "http://localhost:8080/cms/api/v1/staff",
+    url: baseUrl,
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(staff),
@@ -54,7 +55,7 @@ export function saveStaff(staff) {
 
 export function updateStaff(staffId, staffData) {
   return $.ajax({
-    url: baseUrl + staffId,
+    url: baseUrl+ "/" + staffId,
     method: "PATCH",
     contentType: "application/json",
     data: JSON.stringify(staffData),
@@ -65,6 +66,18 @@ export function updateStaff(staffId, staffData) {
 
     error: function (error) {
       console.log(error);
+    },
+  });
+}
+
+export async function searchStaff(staffId) {
+  return $.ajax({
+    url: baseUrl + "/" + staffId,
+    method: "GET",
+    dataType: "json",
+
+    error: function (error) {
+      swal("Warning!", "Member not found!", "info");
     },
   });
 }
