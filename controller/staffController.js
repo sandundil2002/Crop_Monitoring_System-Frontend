@@ -4,6 +4,7 @@ import {
   saveStaff,
   updateStaff,
   searchStaff,
+  deleteStaff,
   validateUserData,
 } from "../model/staffModel.js";
 
@@ -203,6 +204,31 @@ $(document).on("click", ".btn-edit-staff", function () {
   $("#editStaffModal").modal("show");
 });
 
+$(document).on("click", ".btn-delete-staff", function () {
+  const staffId = $(this).data("staff-id");
+
+  swal({
+    title: "Are you sure?",
+    text: `Do you want to delete staff member with ID: ${staffId}?`,
+    icon: "warning",
+    buttons: {
+      cancel: "Cancel",
+      confirm: {
+        text: "Delete",
+        visible: true,
+        className: "btn-danger",
+      },
+    },
+  }).then((willDelete) => {
+    if (willDelete) {
+      const promise = deleteStaff(staffId);
+      promise.then(() => {
+        loadStaffTable();
+      });
+    }
+  });
+});
+
 async function loadStaffTable() {
   const staffList = await getAllStaff();
   $("#staffTable").empty();
@@ -253,7 +279,7 @@ async function loadStaffTable() {
         staff.role +
         "</td>" +
         "<td>" +
-        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-staff' data-staff-id='" +
+        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-staff mx-1' data-staff-id='" +
         staff.staffId +
         "' data-bs-toggle='modal' data-bs-target='#editStaffModal'>" +
         "<i class='bi bi-pencil'></i>" +
@@ -267,6 +293,7 @@ async function loadStaffTable() {
         "</tr>"
     );
   });
+  loadStaffIds();
 }
 
 async function loadStaffIds() {

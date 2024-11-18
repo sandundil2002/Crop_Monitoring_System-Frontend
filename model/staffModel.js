@@ -82,6 +82,19 @@ export async function searchStaff(staffId) {
   });
 }
 
+export function deleteStaff(staffId) {
+  return $.ajax({
+    url: baseUrl + "/" + staffId,
+    method: "DELETE",
+    data: "data",
+    dataType: "dataType",
+
+    success: function (response) {
+      swal("Confirmation!", "Member Delete Successfully!", "success");
+    },
+  });
+}
+
 export function validateUserData(user) {
   const namePattern = /^[A-Za-z\s]+$/; 
   const addressPattern = /^[A-Za-z0-9\s,.'-]+$/; 
