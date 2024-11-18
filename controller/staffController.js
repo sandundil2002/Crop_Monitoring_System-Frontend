@@ -1,53 +1,51 @@
-import { getAllStaff, getAllVehicles } from "../model/staffModel.js";
+import {
+  getAllStaff,
+  getAllVehicles,
+  saveStaff,
+  validateUserData,
+} from "../model/staffModel.js";
 
 $(document).ready(function () {
-  $("#field").change(function () {
-    $("#field option:selected").each(function () {
-      const value = $(this).val();
-      if (
-        $("#selectedFieldsList li").filter(function () {
-          return $(this).text().includes(value);
-        }).length === 0
-      ) {
-        $("#selectedFieldsList").append(`
-                        <li>${value} 
-                            <button class="remove-btn btn btn-danger mb-2" style="margin-left:10px;" data-value="${value}">
-                                &#10005;
-                            </button>
-                        </li>
-                    `);
-      }
-    });
-  });
+  $("#btnSave").click(function () {
+    const firstName = $("#staffFirstName").val();
+    const lastName = $("#staffLastName").val();
+    const designation = $("#designation").val();
+    const gender = $("#gender").val();
+    const dob = $("#dob").val();
+    const addressL1 = $("#addressL1").val();
+    const addressL2 = $("#addressL2").val();
+    const addressL3 = $("#addressL3").val();
+    const addressL4 = $("#addressL4").val();
+    const addressL5 = $("#addressL5").val();
+    const mobile = $("#mobile").val();
+    const email = $("#email").val();
+    const role = $("#role").val();
+    const vehicleId = $("#vehicleId").val();
 
-  $("#selectedFieldsList").on("click", ".remove-btn", function () {
-    const valueToRemove = $(this).data("value");
-    $(this).parent().remove();
-    $("#field option")
-      .filter(function () {
-        return $(this).val() === valueToRemove;
-      })
-      .prop("selected", false);
-  });
+    const userData = {
+      firstName: firstName,
+      lastName: lastName,
+      designation: designation,
+      gender: gender,
+      dateOfBirth: dob,
+      addressLine1: addressL1,
+      addressLine2: addressL2,
+      addressLine3: addressL3,
+      addressLine4: addressL4,
+      addressLine5: addressL5,
+      mobile: mobile,
+      email: email,
+      role: role,
+      vehicleId: vehicleId,
+    };
 
-  $("#editField").change(function () {
-    $("#editField option:selected").each(function () {
-      const value = $(this).val();
-
-      if (
-        $("#editSelectedFieldsList li").filter(function () {
-          return $(this).text().includes(value);
-        }).length === 0
-      ) {
-        $("#editSelectedFieldsList").append(`
-                        <li>${value} 
-                            <button class="remove-btn btn btn-danger mb-2" data-value="${value}" style="margin-left:10px;">
-                                &#10005;
-                            </button>
-                        </li>
-                    `);
-      }
-    });
+    if (validateUserData(userData)) {
+      console.log(userData);      
+      const promise = saveStaff(userData);
+      promise.then(() => {
+          loadStaffTable();
+      });
+    }
   });
 
   $("#editSelectedFieldsList").on("click", ".remove-btn", function () {
@@ -93,8 +91,7 @@ $(document).ready(function () {
 
 async function loadStaffTable() {
   const staffList = await getAllStaff();
-  console.log(staffList);
-
+  $("#staffTable").empty();
   staffList.forEach(function (staff) {
     $(".table").append(
       "<tr> " +
@@ -110,7 +107,7 @@ async function loadStaffTable() {
         staff.designation +
         "</td>" +
         "<td>" +
-        (staff.vehicles || "None") +
+        (staff.vehicleId || "None") +
         "</td>" +
         "<td>" +
         staff.gender +
@@ -173,4 +170,3 @@ async function loadVehicleIds() {
     );
   });
 }
-
