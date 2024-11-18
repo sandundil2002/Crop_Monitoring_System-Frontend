@@ -1,9 +1,9 @@
 const token = localStorage.getItem("authToken");
-const baseUrl = "http://localhost:8080/cms/api/v1/staff";
+const baseUrl = "http://localhost:8080/cms/api/v1/staff/";
 
 export function getAllStaff() {
   return $.ajax({
-    url: baseUrl,
+    url: "http://localhost:8080/cms/api/v1/staff",
     method: "GET",
     dataType: "json",
     headers: {
@@ -33,7 +33,7 @@ export function getAllVehicles() {
 
 export function saveStaff(staff) {
   return $.ajax({
-    url: baseUrl,
+    url: "http://localhost:8080/cms/api/v1/staff",
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(staff),
@@ -48,6 +48,23 @@ export function saveStaff(staff) {
     error: function (error) {
       console.log("Error" + error);
       swal("Error!", "Staff Saved Failed", "error");
+    },
+  });
+}
+
+export function updateStaff(staffId, staffData) {
+  return $.ajax({
+    url: baseUrl + staffId,
+    method: "PATCH",
+    contentType: "application/json",
+    data: JSON.stringify(staffData),
+
+    success: function () {
+      swal("Confirmation!", "Staff Member Update Successfully!", "success");
+    },
+
+    error: function (error) {
+      console.log(error);
     },
   });
 }

@@ -2,6 +2,7 @@ import {
   getAllStaff,
   getAllVehicles,
   saveStaff,
+  updateStaff,
   validateUserData,
 } from "../model/staffModel.js";
 
@@ -40,12 +41,64 @@ $(document).ready(function () {
     };
 
     if (validateUserData(userData)) {
-      console.log(userData);      
+      console.log(userData);
       const promise = saveStaff(userData);
       promise.then(() => {
-          loadStaffTable();
+        loadStaffTable();
       });
     }
+  });
+
+  $("#btnEdit").click(function () {
+    const staffId = $("#editStaffId").val();
+    const firstName = $("#editStaffFirstName").val();
+    const lastName = $("#editStaffLastName").val();
+    const designation = $("#editDesignation").val();
+    const gender = $("#editGender").val();
+    const dob = $("#editDob").val();
+    const addressL1 = $("#editAddressL1").val();
+    const addressL2 = $("#editAddressL2").val();
+    const addressL3 = $("#editAddressL3").val();
+    const addressL4 = $("#editAddressL4").val();
+    const addressL5 = $("#editAddressL5").val();
+    const mobile = $("#editMobile").val();
+    const email = $("#editEmail").val();
+    const role = $("#editRole").val();
+    const vehicleId = $("#editVehicleId").val();
+
+    const staffData = {
+      firstName: firstName,
+      lastName: lastName,
+      designation: designation,
+      gender: gender,
+      dateOfBirth: dob,
+      addressLine1: addressL1,
+      addressLine2: addressL2,
+      addressLine3: addressL3,
+      addressLine4: addressL4,
+      addressLine5: addressL5,
+      mobile: mobile,
+      email: email,
+      role: role,
+      vehicleId: vehicleId,
+    };
+
+    swal({
+      title: "Are you sure?",
+      text: "Do you want to update this member!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willUpdate) => {
+      if (willUpdate) {
+        if (validateUserData(staffData)) {
+          const promise = updateStaff(staffId, staffData);
+          promise.then(() => {
+            loadStaffTable();
+          });
+        }
+      }
+    });
   });
 
   $("#editSelectedFieldsList").on("click", ".remove-btn", function () {
@@ -58,35 +111,39 @@ $(document).ready(function () {
       .prop("selected", false);
   });
 
-  $("#btn-edit-staff").on("click", function () {
-    const row = $(this).closest("tr");
-    const staffId = row.find("td:eq(0)").text();
-    const staffFirstName = row.find("td:eq(1)").text();
-    const designation = row.find("td:eq(2)").text();
-    const field = row.find("td:eq(3)").text();
-    const dob = row.find("td:eq(4)").text();
-    const gender = row.find("td:eq(5)").text();
-    const address = row.find("td:eq(8)").text();
-    const mobile = row.find("td:eq(10)").text();
-    const role = row.find("td:eq(11)").text();
-    const vehicle = row.find("td:eq(13)").text();
-
-    $("#editStaffId").val(staffId);
-    $("#editStaffFirstName").val(staffFirstName);
-    $("#editDesignation").val(designation);
-    $("#editGender").val(gender);
-    $("#editDob").val(dob);
-    $("#editAddressL1").val(address);
-    $("#editMobile").val(mobile);
-    $("#editRole").val(role);
-    $("#editField").val(field);
-    $("#editVehicle").val(vehicle);
-
-    $("#editStaffModal").modal("show");
-  });
-
   loadStaffTable();
   loadVehicleIds();
+});
+
+$(document).on("click", ".btn-edit-staff", function () {
+  const row = $(this).closest("tr");
+  const staffId = row.find("td:eq(0)").text();
+  const staffName = row.find("td:eq(1)").text().split(" ");
+  const designation = row.find("td:eq(2)").text();
+  const vehicle = row.find("td:eq(3)").text();
+  const gender = row.find("td:eq(4)").text();
+  const dob = row.find("td:eq(5)").text();
+  const address = row.find("td:eq(7)").text().split(" ");
+  const mobile = row.find("td:eq(8)").text();
+  const email = row.find("td:eq(9)").text();
+  const role = row.find("td:eq(10)").text();
+
+  $("#editStaffId").val(staffId);
+  $("#editStaffFirstName").val(staffName[0]);
+  $("#editStaffLastName").val(staffName[1] || "");
+  $("#editDesignation").val(designation);
+  $("#editGender").val(gender);
+  $("#editDob").val(dob);
+  $("#editAddressL1").val(address[0]);
+  $("#editAddressL2").val(address[1]);
+  $("#editAddressL3").val(address[2]);
+  $("#editAddressL4").val(address[3]);
+  $("#editAddressL5").val(address[4]);
+  $("#editMobile").val(mobile);
+  $("#editEmail").val(email);
+  $("#editRole").val(role);
+  $("#editVehicleId").val(vehicle);
+  $("#editStaffModal").modal("show");
 });
 
 async function loadStaffTable() {
