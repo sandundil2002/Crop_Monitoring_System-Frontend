@@ -15,3 +15,39 @@ export function getAllVehicles() {
     },
   });
 }
+
+export function saveVehicle(vehicle) {
+  return $.ajax({
+    url: baseUrl,
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(vehicle),
+    headers: {
+      Authorization: `Bearer ` + token,
+    },
+
+    success: function () {
+      swal("Confirmation!", "Vehicle Saved Successfully!", "success");
+    },
+
+    error: function (error) {
+      console.log("Error" + error);
+      swal("Error!", "Vehicle Saved Failed", "error");
+    },
+  });
+}
+
+export function validateVehicle(vehicle) {
+  const numberPlatePattern = /^[A-Za-z]{2,3} \d{4}$/;
+
+  if (!numberPlatePattern.test(vehicle.numberPlate)) {
+    swal({
+      title: "Warning!",
+      text: "Invalid Vehicle Number Plate!",
+      icon: "error",
+      button: "Try Again!",
+    });
+    return false;
+  }
+  return true;
+}

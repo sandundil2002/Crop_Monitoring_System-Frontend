@@ -1,6 +1,33 @@
-import { getAllVehicles } from "../model/vehicleModel.js";
+import {
+  getAllVehicles,
+  validateVehicle,
+  saveVehicle,
+} from "../model/vehicleModel.js";
 
 $(document).ready(function () {
+  $("#btnSave").click(() => {
+    const category = $("#category").val();
+    const numberPlate = $("#licensePlate").val();
+    const fuelType = $("#fuelType").val();
+    const status = $("#status").val();
+    const remarks = $("#remarks").val();
+
+    const vehicleData = {
+      category: category,
+      numberPlate: numberPlate,
+      fuelType: fuelType,
+      status: status,
+      remarks: remarks,
+    };
+
+    if (validateVehicle(vehicleData)) {
+      const promise = saveVehicle(vehicleData);
+      promise.then(() => {
+        loadVehicleTable();
+      });
+    }
+  });
+
   $("#btn-edit-vehicle").on("click", function () {
     const row = $(this).closest("tr");
     const vehicleId = row.find("td:eq(0)").text();
@@ -29,7 +56,7 @@ $(document).ready(function () {
     $("#editVehicleModal").modal("hide");
   });
 
-  loadVehicleTable()
+  loadVehicleTable();
 });
 
 async function loadVehicleTable() {
@@ -44,7 +71,7 @@ async function loadVehicleTable() {
         "<td>" +
         vehicle.category +
         "</td>" +
-        "<td>" +
+        "<td class ='text-uppercase'>" +
         vehicle.numberPlate +
         "</td>" +
         "<td>" +

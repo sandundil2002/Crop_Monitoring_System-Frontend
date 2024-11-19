@@ -9,7 +9,7 @@ import {
 } from "../model/staffModel.js";
 
 $(document).ready(function () {
-  $("#btnSave").click(function () {
+  $("#btnSave").click(() => {
     const firstName = $("#staffFirstName").val();
     const lastName = $("#staffLastName").val();
     const designation = $("#designation").val();
@@ -43,7 +43,6 @@ $(document).ready(function () {
     };
 
     if (validateUserData(userData)) {
-      console.log(userData);
       const promise = saveStaff(userData);
       promise.then(() => {
         loadStaffTable();

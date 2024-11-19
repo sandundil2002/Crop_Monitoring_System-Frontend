@@ -38,12 +38,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addVehicleForm">
-                        <div class="mb-3">
-                            <label for="licensePlate" class="form-label">Vehicle License plate Number</label>
-                            <input type="text" class="form-control" id="licensePlate"
-                                placeholder="Please input vehicle license plate number" required>
-                        </div>
+                    <div id="addVehicleForm">
                         <div class="mb-3">
                             <label for="category" class="form-label">Vehicle Category</label>
                             <select class="form-select" id="category" required>
@@ -57,6 +52,11 @@
                                 <option value="Land-vehicle">Land vehicle</option>
                                 <option value="Lorry">Lorry</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="licensePlate" class="form-label">Vehicle License plate Number</label>
+                            <input type="text" class="form-control text-uppercase" id="licensePlate" placeholder="Please input vehicle license plate number"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="fuelType" class="form-label">Fuel Type</label>
@@ -76,31 +76,15 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="driver" class="form-label">Select Driver</label>
-                            <select class="form-select" id="driver" required>
-                                <option selected disabled>Select allocated driver</option>
-                                <option value="S001">S001</option>
-                                <option value="S002">S002</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="assistant" class="form-label">Select Assistant(Optional)</label>
-                            <select class="form-select" id="assistant">
-                                <option selected disabled>Select allocated assistant</option>
-                                <option value="S001">S001</option>
-                                <option value="S002">S002</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
                             <label for="remarks" class="form-label">Special Remarks</label>
-                            <input type="text" class="form-control" id="remarks"
-                                placeholder="Any special remark if have">
+                            <input type="text" class="form-control text-capitalize" id="remarks"
+                                placeholder="Any special remark if have" required>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="addVehicleForm" class="btn btn-success">Add New Vehicle</button>
+                    <button type="submit" form="addVehicleForm" class="btn btn-success" id="btnSave">Add New Vehicle</button>
                 </div>
             </div>
         </div>
@@ -141,7 +125,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="vehicleTable"></tbody>
+            <tbody class="text-capitalize" id="vehicleTable"></tbody>
         </table>
     </div>
 
