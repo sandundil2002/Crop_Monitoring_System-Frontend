@@ -2,6 +2,7 @@ import {
   getAllVehicles,
   validateVehicle,
   saveVehicle,
+  updateVehicle,
 } from "../model/vehicleModel.js";
 
 $(document).ready(function () {
@@ -28,27 +29,41 @@ $(document).ready(function () {
     }
   });
 
-  $("#btn-edit-vehicle").on("click", function () {
-    const row = $(this).closest("tr");
-    const vehicleId = row.find("td:eq(0)").text();
-    const category = row.find("td:eq(1)").text();
-    const driver = row.find("td:eq(2)").text();
-    const assistant = row.find("td:eq(3)").text();
-    const numberPlate = row.find("td:eq(4)").text();
-    const fuel = row.find("td:eq(5)").text();
-    const status = row.find("td:eq(6)").text();
-    const remarks = row.find("td:eq(7)").text();
+  $("#btnEdit").click(function () {
+    const vehicleId = $("#editVehicleId").val();
+    const category = $("#editCategory").val();
+    const numberPlate = $("#editLicensePlate").val();
+    const fuelType = $("#editFuelType").val();
+    const status = $("#editStatus").val();
+    const remarks = $("#editRemarks").val();
 
-    $("#editVehicleId").val(vehicleId);
-    $("#editLicensePlate").val(numberPlate);
-    $("#editCategory").val(category);
-    $("#editFuelType").val(fuel);
-    $("#editStatus").val(status);
-    $("#editDriver").val(driver);
-    $("#editAssistant").val(assistant);
-    $("#editRemarks").val(remarks);
+    const vehicleData = {
+      category: category,
+      numberPlate: numberPlate,
+      fuelType: fuelType,
+      status: status,
+      remarks: remarks,
+    };
 
-    $("#editVehicleModal").modal("show");
+    console.log(vehicleData);
+    
+
+    swal({
+      title: "Are you sure?",
+      text: "Do you want to update this vehicle!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willUpdate) => {
+      if (willUpdate) {
+        if (validateVehicle(vehicleData)) {
+          const promise = updateVehicle(vehicleId, vehicleData);
+          promise.then(() => {
+            loadVehicleTable();
+          });
+        }
+      }
+    });
   });
 
   $("#editVehicleForm").on("submit", function (event) {
@@ -99,3 +114,20 @@ async function loadVehicleTable() {
     );
   });
 }
+
+$(document).on("click", ".btn-edit-vehicle", function () {
+  const row = $(this).closest("tr");
+  const vehicleId = row.find("td:eq(0)").text();
+  const category = row.find("td:eq(1)").text();
+  const numberPlate = row.find("td:eq(2)").text();
+  const fuelType = row.find("td:eq(3)").text();
+  const status = row.find("td:eq(4)").text();
+  const remarks = row.find("td:eq(5)").text();
+
+  $("#editVehicleId").val(vehicleId);
+  $("#editCategory").val(category);
+  $("#editLicensePlate").val(numberPlate);
+  $("#editFuelType").val(fuelType);
+  $("#editStatus").val(status);
+  $("#editRemarks").val(remarks);
+});

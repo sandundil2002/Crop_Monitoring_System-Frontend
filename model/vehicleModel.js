@@ -37,6 +37,26 @@ export function saveVehicle(vehicle) {
   });
 }
 
+export function updateVehicle(vehicleId, vehicleData) {
+  return $.ajax({
+    url: baseUrl + "/" + vehicleId,
+    method: "PATCH",
+    contentType: "application/json",
+    data: JSON.stringify(vehicleData),
+    headers: {
+      Authorization: `Bearer ` + token,
+    },
+
+    success: function () {
+      swal("Confirmation!", "Vehicle Update Successfully!", "success");
+    },
+
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}
+
 export function validateVehicle(vehicle) {
   const numberPlatePattern = /^[A-Za-z]{2,3} \d{4}$/;
 

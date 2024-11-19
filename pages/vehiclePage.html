@@ -144,11 +144,6 @@
                             <input type="text" class="form-control" id="editVehicleId" readonly>
                         </div>
                     <div class="mb-3">
-                        <label for="editLicensePlate" class="form-label">Vehicle License plate Number</label>
-                        <input type="text" class="form-control" id="editLicensePlate" placeholder="Please edit vehicle license plate number"
-                            required>
-                    </div>
-                    <div class="mb-3">
                         <label for="editCategory" class="form-label">Vehicle Category</label>
                         <select class="form-select" id="editCategory" required>
                             <option selected disabled>Select vehicle category</option>
@@ -161,6 +156,11 @@
                             <option value="Land-vehicle">Land vehicle</option>
                             <option value="Lorry">Lorry</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLicensePlate" class="form-label">Vehicle License plate Number</label>
+                        <input type="text" class="form-control text-uppercase" id="editLicensePlate" placeholder="Please edit vehicle license plate number"
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="editFuelType" class="form-label">Fuel Type</label>
@@ -180,30 +180,14 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="editDriver" class="form-label">Select Driver</label>
-                        <select class="form-select" id="editDriver" required>
-                            <option selected disabled>Select allocated driver</option>
-                            <option value="S001">S001</option>
-                            <option value="S002">S002</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editAssistant" class="form-label">Select Assistant(Optional)</label>
-                        <select class="form-select" id="editAssistant">
-                            <option selected disabled>Select allocated assistant</option>
-                            <option value="S001">S001</option>
-                            <option value="S002">S002</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label for="editRemarks" class="form-label">Special Remarks</label>
-                        <input type="text" class="form-control" id="editRemarks" placeholder="Edit special remark if have">
+                        <input type="text" class="form-control text-capitalize" id="editRemarks" placeholder="Edit special remark if have">
                     </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="editVehicleForm" class="btn btn-success">Save Changes</button>
+                    <button type="submit" form="editVehicleForm" class="btn btn-success" id="btnEdit">Save Changes</button>
                 </div>
             </div>
         </div>
