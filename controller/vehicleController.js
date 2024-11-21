@@ -3,6 +3,7 @@ import {
   validateVehicle,
   saveVehicle,
   updateVehicle,
+  searchVehicle
 } from "../model/vehicleModel.js";
 
 $(document).ready(function () {
@@ -45,9 +46,6 @@ $(document).ready(function () {
       remarks: remarks,
     };
 
-    console.log(vehicleData);
-    
-
     swal({
       title: "Are you sure?",
       text: "Do you want to update this vehicle!",
@@ -69,6 +67,61 @@ $(document).ready(function () {
   $("#editVehicleForm").on("submit", function (event) {
     event.preventDefault();
     $("#editVehicleModal").modal("hide");
+  });
+
+  $("#btnSearch").click(async function () {
+    try {
+      const vehicleId = $("#dropdownMenuButton").text().trim();
+
+      if (!vehicleId || vehicleId === "Search Vehicle By Id") {
+        swal("Warning!", "Please select a valid vehicle ID", "warning");
+        return;
+      }
+
+      $("#btnSearch")
+        .html(
+          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+        )
+        .prop("disabled", true);
+
+      const vehicleDetails = await searchVehicle(vehicleId);
+
+      let vehicleArray = [];
+      if (vehicleDetails) {
+        if (Array.isArray(vehicleDetails)) {
+          vehicleArray = vehicleDetails;
+        } else if (typeof vehicleDetails === "object") {
+          vehicleArray = [vehicleDetails];
+        }
+      }
+
+      $("#vehicleTable").empty();
+
+      if (vehicleArray.length === 0) {
+        swal("Information", "No vehicle details found", "info");
+        return;
+      }
+
+      vehicleArray.forEach(function (vehicle) {
+        const row = createVehicleTableRow(vehicle);
+        $(".table tbody").append(row);
+      });
+    } catch (error) {
+      console.error("Comprehensive error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
+      swal(
+        "Error",
+        `Failed to retrieve vehicle details: ${error.message}`,
+        "error"
+      );
+    } finally {
+      $("#btnSearch")
+        .html('<i class="bi bi-search"></i>')
+        .prop("disabled", false);
+    }
   });
 
   loadVehicleTable();
@@ -113,6 +166,36 @@ async function loadVehicleTable() {
         "</tr>"
     );
   });
+  loadVehicleIds();
+}
+
+async function loadVehicleIds() {
+  try {
+    const vehicleList = await getAllVehicles();
+    const vehicleIdDropdown = $("#vehicleIdList");
+    vehicleIdDropdown.empty();
+
+    vehicleList.forEach((vehicle) => {
+      const vehicleId = vehicle.vehicleId;
+      const listItem = `
+        <li>
+          <a class="dropdown-item" href="#" data-value="${vehicleId}">
+            ${vehicleId}
+          </a>
+        </li>
+      `;
+      vehicleIdDropdown.append(listItem);
+    });
+
+    $("#vehicleIdList").on("click", ".dropdown-item", function (event) {
+      event.preventDefault();
+      const selectedId = $(this).data("value");
+      $("#dropdownMenuButton").text(selectedId);
+      $("#dropdownMenuButton").data("selected-id", selectedId);
+    });
+  } catch (error) {
+    console.error("Error loading vehicle IDs:", error);
+  }
 }
 
 $(document).on("click", ".btn-edit-vehicle", function () {
@@ -131,3 +214,31 @@ $(document).on("click", ".btn-edit-vehicle", function () {
   $("#editStatus").val(status);
   $("#editRemarks").val(remarks);
 });
+
+function createVehicleTableRow(vehicle) {
+  const safeValue = (value) => value || "N/A";
+  return `
+        <tr>
+            <td>${safeValue(vehicle.vehicleId)}</td>
+            <td>${safeValue(vehicle.category)}</td>
+            <td>${safeValue(vehicle.numberPlate)}</td>
+            <td>${safeValue(vehicle.fuelType)}</td>
+            <td>${safeValue(vehicle.status)}</td>
+            <td>${safeValue(vehicle.remarks)}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <button class='btn btn-outline-primary btn-sm mb-1 mx-1 btn-edit-vehicle' 
+                            data-vehicle-id='${vehicle.vehicleId}' 
+                            data-bs-toggle='modal' 
+                            data-bs-target='#editVehicleModal'>
+                        <i class='bi bi-pencil'></i>
+                    </button>
+                    <button class='btn btn-outline-danger btn-sm mb-1 btn-delete-vehicle' 
+                            data-vehicle-id='${vehicle.vehicleId}'>
+                        <i class='bi bi-trash'></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+}

@@ -55,8 +55,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="licensePlate" class="form-label">Vehicle License plate Number</label>
-                            <input type="text" class="form-control text-uppercase" id="licensePlate" placeholder="Please input vehicle license plate number"
-                                required>
+                            <input type="text" class="form-control text-uppercase" id="licensePlate"
+                                placeholder="Please input vehicle license plate number" required>
                         </div>
                         <div class="mb-3">
                             <label for="fuelType" class="form-label">Fuel Type</label>
@@ -84,7 +84,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="addVehicleForm" class="btn btn-success" id="btnSave">Add New Vehicle</button>
+                    <button type="submit" form="addVehicleForm" class="btn btn-success" id="btnSave">Add New
+                        Vehicle</button>
                 </div>
             </div>
         </div>
@@ -98,13 +99,8 @@
                         type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         Search Vehicle By Id
                     </button>
-                    <ul class="dropdown-menu w-25" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="#" data-value="F001">F001</a></li>
-                        <li><a class="dropdown-item" href="#" data-value="F002">F002</a></li>
-                        <li><a class="dropdown-item" href="#" data-value="F003">F003</a></li>
-                        <li><a class="dropdown-item" href="#" data-value="F004">F004</a></li>
-                    </ul>
-                    <button class="btn btn-success" type="button" id="btn-search">
+                    <ul class="dropdown-menu w-25" id="vehicleIdList" aria-labelledby="dropdownMenuButton"></ul>
+                    <button class="btn btn-success" type="button" id="btnSearch">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
@@ -129,7 +125,8 @@
         </table>
     </div>
 
-    <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,51 +140,53 @@
                             <label for="editVehicleId" class="form-label">Vehicle Id</label>
                             <input type="text" class="form-control" id="editVehicleId" readonly>
                         </div>
-                    <div class="mb-3">
-                        <label for="editCategory" class="form-label">Vehicle Category</label>
-                        <select class="form-select" id="editCategory" required>
-                            <option selected disabled>Select vehicle category</option>
-                            <option value="Car">Car</option>
-                            <option value="Van">Van</option>
-                            <option value="Motorbike">Motorbikes</option>
-                            <option value="Land-master">Land masters</option>
-                            <option value="Tractor-4WD">Tractor-4WD</option>
-                            <option value="Tankers-truck">Tankers truck</option>
-                            <option value="Land-vehicle">Land vehicle</option>
-                            <option value="Lorry">Lorry</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editLicensePlate" class="form-label">Vehicle License plate Number</label>
-                        <input type="text" class="form-control text-uppercase" id="editLicensePlate" placeholder="Please edit vehicle license plate number"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editFuelType" class="form-label">Fuel Type</label>
-                        <select class="form-select" id="editFuelType" required>
-                            <option selected disabled>Select fuel type</option>
-                            <option value="Petrol">Petrol</option>
-                            <option value="Diesel ">Diesel</option>
-                            <option value="Electric">Electric</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editStatus" class="form-label">Vehicle Status</label>
-                        <select class="form-select" id="editStatus" required>
-                            <option selected disabled>Select vehicle status</option>
-                            <option value="Available">Available</option>
-                            <option value="Out-of-service">Out Of Service</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editRemarks" class="form-label">Special Remarks</label>
-                        <input type="text" class="form-control text-capitalize" id="editRemarks" placeholder="Edit special remark if have">
-                    </div>
+                        <div class="mb-3">
+                            <label for="editCategory" class="form-label">Vehicle Category</label>
+                            <select class="form-select" id="editCategory" required>
+                                <option selected disabled>Select vehicle category</option>
+                                <option value="Car">Car</option>
+                                <option value="Van">Van</option>
+                                <option value="Motorbike">Motorbikes</option>
+                                <option value="Land-master">Land masters</option>
+                                <option value="Tractor-4WD">Tractor-4WD</option>
+                                <option value="Tankers-truck">Tankers truck</option>
+                                <option value="Land-vehicle">Land vehicle</option>
+                                <option value="Lorry">Lorry</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLicensePlate" class="form-label">Vehicle License plate Number</label>
+                            <input type="text" class="form-control text-uppercase" id="editLicensePlate"
+                                placeholder="Please edit vehicle license plate number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editFuelType" class="form-label">Fuel Type</label>
+                            <select class="form-select" id="editFuelType" required>
+                                <option selected disabled>Select fuel type</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel ">Diesel</option>
+                                <option value="Electric">Electric</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStatus" class="form-label">Vehicle Status</label>
+                            <select class="form-select" id="editStatus" required>
+                                <option selected disabled>Select vehicle status</option>
+                                <option value="Available">Available</option>
+                                <option value="Out-of-service">Out Of Service</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRemarks" class="form-label">Special Remarks</label>
+                            <input type="text" class="form-control text-capitalize" id="editRemarks"
+                                placeholder="Edit special remark if have">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="editVehicleForm" class="btn btn-success" id="btnEdit">Save Changes</button>
+                    <button type="submit" form="editVehicleForm" class="btn btn-success" id="btnEdit">Save
+                        Changes</button>
                 </div>
             </div>
         </div>

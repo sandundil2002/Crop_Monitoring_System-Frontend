@@ -57,6 +57,18 @@ export function updateVehicle(vehicleId, vehicleData) {
   });
 }
 
+export async function searchVehicle(vehicleId) {
+  return $.ajax({
+    url: baseUrl + "/" + vehicleId,
+    method: "GET",
+    dataType: "json",
+
+    error: function (error) {
+      swal("Warning!", "Vehicle not found!", "info");
+    },
+  });
+}
+
 export function validateVehicle(vehicle) {
   const numberPlatePattern = /^[A-Za-z]{2,3} \d{4}$/;
 
