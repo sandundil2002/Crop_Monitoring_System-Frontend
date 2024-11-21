@@ -69,6 +69,19 @@ export async function searchVehicle(vehicleId) {
   });
 }
 
+export function deleteVehicle(vehicleId) {
+  return $.ajax({
+    url: baseUrl + "/" + vehicleId,
+    method: "DELETE",
+    data: "data",
+    dataType: "dataType",
+
+    success: function (response) {
+      swal("Confirmation!", "Vehicle Delete Successfully!", "success");
+    },
+  });
+}
+
 export function validateVehicle(vehicle) {
   const numberPlatePattern = /^[A-Za-z]{2,3} \d{4}$/;
 

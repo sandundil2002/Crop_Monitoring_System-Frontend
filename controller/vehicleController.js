@@ -3,7 +3,8 @@ import {
   validateVehicle,
   saveVehicle,
   updateVehicle,
-  searchVehicle
+  searchVehicle,
+  deleteVehicle
 } from "../model/vehicleModel.js";
 
 $(document).ready(function () {
@@ -127,6 +128,35 @@ $(document).ready(function () {
   loadVehicleTable();
 });
 
+$(document).on("click", ".btn-delete-vehicle", function () {
+  const vehicleId = $(this).data("vehicle-id");
+  const promise = deleteVehicle(vehicleId);
+      promise.then(() => {
+        loadVehicleTable()
+      });
+
+  // swal({
+  //   title: "Are you sure?",
+  //   text: `Do you want to delete staff member with ID: ${vehicleId}?`,
+  //   icon: "warning",
+  //   buttons: {
+  //     cancel: "Cancel",
+  //     confirm: {
+  //       text: "Delete",
+  //       visible: true,
+  //       className: "btn-danger",
+  //     },
+  //   },
+  // }).then((willDelete) => {
+  //   if (willDelete) {
+  //     const promise = deleteVehicle(vehicleId);
+  //     promise.then(() => {
+  //       loadVehicleTable()
+  //     });
+  //   }
+  // });
+});
+
 async function loadVehicleTable() {
   const vehicleList = await getAllVehicles();
   $("#vehicleTable").empty();
@@ -152,12 +182,12 @@ async function loadVehicleTable() {
         vehicle.remarks +
         "</td>" +
         "<td>" +
-        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-vehicle mx-1' data-staff-id='" +
+        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-vehicle mx-1' data-vehicle-id='" +
         vehicle.vehicleId +
         "' data-bs-toggle='modal' data-bs-target='#editVehicleModal'>" +
         "<i class='bi bi-pencil'></i>" +
         "</button>" +
-        "<button class='btn btn-outline-danger btn-sm mb-1 btn-delete-vehicle' data-staff-id='" +
+        "<button class='btn btn-outline-danger btn-sm mb-1 btn-delete-vehicle' data-vehicle-id='" +
         vehicle.vehicleId +
         "'>" +
         "<i class='bi bi-trash'></i>" +
