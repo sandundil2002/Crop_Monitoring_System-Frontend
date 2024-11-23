@@ -1,4 +1,8 @@
-import {getAllEquipments} from "../model/equipmentModel.js";
+import {
+    getAllEquipments,
+    getAllFields,
+    getAllStaff}
+    from "../model/equipmentModel.js";
 
 $(document).ready(function () {
   $("#btn-edit-equipment").on("click", function () {
@@ -67,5 +71,40 @@ async function loadEquipmentTable() {
         });
     } catch (error) {
         console.error("Error loading equipment table:", error);
+    } finally {
+        loadStaffIds();
+        loadFieldIds();
     }
+}
+
+async function loadStaffIds() {
+    const staffList = await getAllStaff();
+    const staffDropdown = $(".staffId");
+    staffDropdown.empty();
+
+    staffDropdown.append(
+        "<option value='' disabled selected>Select Allocated Staff Member</option>"
+    );
+
+    staffList.forEach((staff) => {
+        staffDropdown.append(
+            "<option value='" + staff.staffId + "'>" + staff.staffId + "</option>"
+        );
+    });
+}
+
+async function loadFieldIds() {
+    const fieldList = await getAllFields();
+    const fieldDropdown = $(".fieldId");
+    fieldDropdown.empty();
+
+    fieldDropdown.append(
+        "<option value='' disabled selected>Select Allocated Field</option>"
+    );
+
+    fieldList.forEach((field) => {
+        fieldDropdown.append(
+            "<option value='" + field.fieldId + "'>" + field.fieldId + "</option>"
+        );
+    });
 }
