@@ -76,11 +76,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="assignStaff" class="form-label">Assigned Staff Member</label>
-                            <select class="form-select staffId" id="assignStaff" required></select>
+                            <select class="form-select staffId" id="assignStaff"></select>
                         </div>
                         <div class="mb-3">
                             <label for="assignField" class="form-label">Assigned Field Details</label>
-                            <select class="form-select fieldId" id="assignField" required> </select>
+                            <select class="form-select fieldId" id="assignField"> </select>
                         </div>
                     </div>
                 </div>
@@ -139,14 +139,14 @@
                     <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editEquipmentForm">
+                    <div id="editEquipmentForm">
                         <div class="mb-3">
                             <label for="editEquipmentId" class="form-label">Equipment Id</label>
                             <input type="text" class="form-control" id="editEquipmentId" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="editEquipmentName" class="form-label">Equipment Name</label>
-                            <select class="form-select" id="editEquipmentName" required>
+                            <label for="editCategory" class="form-label">Equipment Name</label>
+                            <select class="form-select" id="editCategory" required>
                                 <option selected disabled>Select equipment name </option>
                                 <option value="Plough">Plough</option>
                                 <option value="Mamotee">Mamotee</option>
@@ -164,8 +164,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editEquipmentType" class="form-label">Equipment Type</label>
-                            <select class="form-select" id="editEquipmentType" required>
+                            <label for="editType" class="form-label">Equipment Type</label>
+                            <select class="form-select" id="editType" required>
                                 <option selected disabled>Select Equipment type</option>
                                 <option value="Electrical">Electrical</option>
                                 <option value="Mechanical">Mechanical</option>
@@ -181,17 +181,17 @@
                         </div>
                         <div class="mb-3">
                             <label for="editAssignStaff" class="form-label">Assigned Staff Member</label>
-                            <select class="form-select staffId" id="editAssignStaff" required> </select>
+                            <select class="form-select staffId" id="editAssignStaff"> </select>
                         </div>
                         <div class="mb-3">
                             <label for="editAssignField" class="form-label">Assigned Field Details</label>
-                            <select class="form-select fieldId" id="editAssignField" required> </select>
+                            <select class="form-select fieldId" id="editAssignField"> </select>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="editEquipmentForm" class="btn btn-success">Save Changes</button>
+                    <button type="submit" form="editEquipmentForm" class="btn btn-success" id="btnEdit">Save Changes</button>
                 </div>
             </div>
         </div>

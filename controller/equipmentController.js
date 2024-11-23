@@ -2,7 +2,8 @@ import {
     getAllEquipments,
     getAllFields,
     getAllStaff,
-    saveEquipment
+    saveEquipment,
+    updateEquipment
 } from "../model/equipmentModel.js";
 
 $(document).ready(function () {
@@ -21,8 +22,6 @@ $(document).ready(function () {
             status: status,
         };
 
-        console.log(equipmentData);
-
         const promise = saveEquipment(equipmentData);
         promise.then(() => {
             loadEquipmentTable().then(r => {
@@ -31,26 +30,43 @@ $(document).ready(function () {
         });
     });
 
-  $("#btn-edit-equipment").on("click", function () {
-    const row = $(this).closest("tr");
-    const equipmentId = row.find("td:eq(0)").text();
-    const equipmentName = row.find("td:eq(1)").text();
-    const type = row.find("td:eq(2)").text();
-    const staff = row.find("td:eq(3)").text();
-    const field = row.find("td:eq(4)").text();
-    const status = row.find("td:eq(5)").text();
+    $("#btnEdit").on("click", function () {
+        const equipmentId = $("#editEquipmentId").val();
+        const category = $("#editCategory").val();
+        const type = $("#editType").val();
+        const staff = $("#editAssignStaff").val();
+        const field = $("#editAssignField").val();
+        const status = $("#editStatus").val();
 
-    $("#editEquipmentId").val(equipmentId);
-    $("#editEquipmentName").val(equipmentName);
-    $("#editEquipmentType").val(type);
-    $("#editStatus").val(status);
-    $("#editAssignStaff").val(staff);
-    $("#editAssignField").val(field);
+        const equipmentData = {
+            equipmentId: equipmentId,
+            category: category,
+            type: type,
+            eqStaff: staff,
+            eqField: field,
+            status: status,
+        };
 
-    $("#editEquipmentModal").modal("show");
-  });
+        swal({
+            title: "Are you sure?",
+            text: "Do you want to update this equipment!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willUpdate) => {
+            if (willUpdate) {
+                const promise = updateEquipment(equipmentId, equipmentData);
+                promise.then(() => {
+                    loadEquipmentTable().then(r => {
+                        $("#editEquipmentModal").modal("hide");
+                    });
+                });
+            }
+        });
+    });
 
-  loadEquipmentTable();
+    loadEquipmentTable();
+
 });
 
 async function loadEquipmentTable() {
@@ -102,6 +118,25 @@ async function loadEquipmentTable() {
         loadFieldIds();
     }
 }
+
+$(document).on("click", ".btn-edit-equipment", function () {
+    const row = $(this).closest("tr");
+    const equipmentId = row.find("td:eq(0)").text();
+    const category = row.find("td:eq(1)").text();
+    const type = row.find("td:eq(2)").text();
+    const staff = row.find("td:eq(3)").text();
+    const field = row.find("td:eq(4)").text();
+    const status = row.find("td:eq(5)").text();
+
+    $("#editEquipmentId").val(equipmentId);
+    $("#editCategory").val(category);
+    $("#editType").val(type);
+    $("#editStatus").val(status);
+    $("#editAssignStaff").val(staff);
+    $("#editAssignField").val(field);
+
+    $("#editEquipmentModal").modal("show");
+});
 
 async function loadStaffIds() {
     const staffList = await getAllStaff();
