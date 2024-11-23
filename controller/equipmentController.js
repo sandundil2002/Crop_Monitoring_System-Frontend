@@ -1,10 +1,36 @@
 import {
     getAllEquipments,
     getAllFields,
-    getAllStaff}
-    from "../model/equipmentModel.js";
+    getAllStaff,
+    saveEquipment
+} from "../model/equipmentModel.js";
 
 $(document).ready(function () {
+    $("#btnSave").on("click", function () {
+        const category = $("#category").val();
+        const type = $("#type").val();
+        const staff = $("#assignStaff").val();
+        const field = $("#assignField").val();
+        const status = $("#status").val();
+
+        const equipmentData = {
+            category: category,
+            type: type,
+            eqStaff: staff,
+            eqField: field,
+            status: status,
+        };
+
+        console.log(equipmentData);
+
+        const promise = saveEquipment(equipmentData);
+        promise.then(() => {
+            loadEquipmentTable().then(r => {
+                $("#addEquipmentModal").modal("hide");
+            });
+        });
+    });
+
   $("#btn-edit-equipment").on("click", function () {
     const row = $(this).closest("tr");
     const equipmentId = row.find("td:eq(0)").text();

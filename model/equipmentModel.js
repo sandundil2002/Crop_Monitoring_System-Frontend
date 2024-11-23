@@ -16,6 +16,27 @@ export function getAllEquipments() {
     });
 }
 
+export function saveEquipment(equipment) {
+    return $.ajax({
+        url: baseUrl,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(equipment),
+        headers: {
+        Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+        swal("Confirmation!", "Equipment Saved Successfully!", "success");
+        },
+
+        error: function (error) {
+        console.log("Error" + error);
+        swal("Error!", "Equipment Saved Failed", "error");
+        },
+    });
+}
+
 export function getAllStaff() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/staff",

@@ -26,7 +26,9 @@ $(document).ready(function () {
     if (validateVehicle(vehicleData)) {
       const promise = saveVehicle(vehicleData);
       promise.then(() => {
-        loadVehicleTable();
+        loadVehicleTable().then(r => {
+            $("#addVehicleModal").modal("hide");
+        });
       });
     }
   });
@@ -155,42 +157,42 @@ $(document).on("click", ".btn-delete-vehicle", function () {
 async function loadVehicleTable() {
   const vehicleList = await getAllVehicles();
   $("#vehicleTable").empty();
-  vehicleList.forEach((vehicle) => {
-    $(".table").append(
-      "<tr> " +
-        "<td>" +
-        vehicle.vehicleId +
-        "</td>" +
-        "<td>" +
-        vehicle.category +
-        "</td>" +
-        "<td class ='text-uppercase'>" +
-        vehicle.numberPlate +
-        "</td>" +
-        "<td>" +
-        vehicle.fuelType +
-        "</td>" +
-        "<td>" +
-        vehicle.status +
-        "</td>" +
-        "<td>" +
-        vehicle.remarks +
-        "</td>" +
-        "<td>" +
-        "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-vehicle mx-1' data-vehicle-id='" +
-        vehicle.vehicleId +
-        "' data-bs-toggle='modal' data-bs-target='#editVehicleModal'>" +
-        "<i class='bi bi-pencil'></i>" +
-        "</button>" +
-        "<button class='btn btn-outline-danger btn-sm mb-1 btn-delete-vehicle' data-vehicle-id='" +
-        vehicle.vehicleId +
-        "'>" +
-        "<i class='bi bi-trash'></i>" +
-        "</button>" +
-        "</td>" +
-        "</tr>"
-    );
-  });
+    vehicleList.forEach((vehicle) => {
+      $(".table").append(
+          "<tr> " +
+          "<td>" +
+          vehicle.vehicleId +
+          "</td>" +
+          "<td>" +
+          vehicle.category +
+          "</td>" +
+          "<td class ='text-uppercase'>" +
+          vehicle.numberPlate +
+          "</td>" +
+          "<td>" +
+          vehicle.fuelType +
+          "</td>" +
+          "<td>" +
+          vehicle.status +
+          "</td>" +
+          "<td>" +
+          vehicle.remarks +
+          "</td>" +
+          "<td>" +
+          "<button class='btn btn-outline-primary btn-sm mb-1 btn-edit-vehicle mx-1' data-vehicle-id='" +
+          vehicle.vehicleId +
+          "' data-bs-toggle='modal' data-bs-target='#editVehicleModal'>" +
+          "<i class='bi bi-pencil'></i>" +
+          "</button>" +
+          "<button class='btn btn-outline-danger btn-sm mb-1 btn-delete-vehicle' data-vehicle-id='" +
+          vehicle.vehicleId +
+          "'>" +
+          "<i class='bi bi-trash'></i>" +
+          "</button>" +
+          "</td>" +
+          "</tr>"
+      );
+    });
   loadVehicleIds();
 }
 
