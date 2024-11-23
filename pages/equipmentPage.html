@@ -135,25 +135,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>E001</td>
-                    <td>Axe</td>
-                    <td>Mechanical</td>
-                    <td>S001</td>
-                    <td>F001</td>
-                    <td>Available</td>
-                    <td>
-                        <button id="btn-edit-equipment" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal"
-                            data-bs-target="#editEquipmentModal">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button id="btn-delete-field" class="btn btn-outline-danger btn-sm mb-1">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
+            <tbody class="text-capitalize" id="equipmentTable"></tbody>
         </table>
     </div>
 
@@ -232,7 +214,7 @@
     </div>
 
 
-    <script src="../controller/equipmentController.js"></script>
+    <script type="module" src="../controller/equipmentController.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

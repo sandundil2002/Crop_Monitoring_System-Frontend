@@ -130,31 +130,26 @@ $(document).ready(function () {
 
 $(document).on("click", ".btn-delete-vehicle", function () {
   const vehicleId = $(this).data("vehicle-id");
-  const promise = deleteVehicle(vehicleId);
+  swal({
+    title: "Are you sure?",
+    text: `Do you want to delete vehicle with ID: ${vehicleId}?`,
+    icon: "warning",
+    buttons: {
+      cancel: "Cancel",
+      confirm: {
+        text: "Delete",
+        visible: true,
+        className: "btn-danger",
+      },
+    },
+  }).then((willDelete) => {
+    if (willDelete) {
+      const promise = deleteVehicle(vehicleId);
       promise.then(() => {
         loadVehicleTable()
       });
-
-  // swal({
-  //   title: "Are you sure?",
-  //   text: `Do you want to delete staff member with ID: ${vehicleId}?`,
-  //   icon: "warning",
-  //   buttons: {
-  //     cancel: "Cancel",
-  //     confirm: {
-  //       text: "Delete",
-  //       visible: true,
-  //       className: "btn-danger",
-  //     },
-  //   },
-  // }).then((willDelete) => {
-  //   if (willDelete) {
-  //     const promise = deleteVehicle(vehicleId);
-  //     promise.then(() => {
-  //       loadVehicleTable()
-  //     });
-  //   }
-  // });
+    }
+  });
 });
 
 async function loadVehicleTable() {

@@ -55,10 +55,13 @@ export function saveStaff(staff) {
 
 export function updateStaff(staffId, staffData) {
   return $.ajax({
-    url: baseUrl+ "/" + staffId,
+    url: baseUrl + "/" + staffId,
     method: "PATCH",
     contentType: "application/json",
     data: JSON.stringify(staffData),
+    headers: {
+      Authorization: `Bearer ` + token,
+    },
 
     success: function () {
       swal("Confirmation!", "Staff Member Update Successfully!", "success");
