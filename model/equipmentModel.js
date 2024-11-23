@@ -57,6 +57,21 @@ export function updateEquipment(equipmentId, equipmentData) {
     });
 }
 
+export async function searchEquipment(equipmentId) {
+    return $.ajax({
+        url: baseUrl + "/" + equipmentId,
+        method: "GET",
+        dataType: "json",
+        headers: {
+        Authorization: "Bearer " + token,
+        },
+
+        error: function (error) {
+            swal("Warning!", "Equipment not found!", "info");
+        },
+    });
+}
+
 export function getAllStaff() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/staff",

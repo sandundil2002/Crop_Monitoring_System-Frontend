@@ -60,16 +60,13 @@ $(document).ready(function () {
         if (validateVehicle(vehicleData)) {
           const promise = updateVehicle(vehicleId, vehicleData);
           promise.then(() => {
-            loadVehicleTable();
+            loadVehicleTable().then(r => {
+                $("#editVehicleModal").modal("hide");
+            });
           });
         }
       }
     });
-  });
-
-  $("#editVehicleForm").on("submit", function (event) {
-    event.preventDefault();
-    $("#editVehicleModal").modal("hide");
   });
 
   $("#btnSearch").click(async function () {
