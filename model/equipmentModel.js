@@ -72,6 +72,23 @@ export async function searchEquipment(equipmentId) {
     });
 }
 
+export function deleteEquipment(equipmentId) {
+    return $.ajax({
+        url: baseUrl + "/" + equipmentId,
+        method: "DELETE",
+        data: "data",
+        dataType: "dataType",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function (response) {
+            swal("Confirmation!", "Equipment Delete Successfully!", "success");
+        },
+    });
+
+}
+
 export function getAllStaff() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/staff",

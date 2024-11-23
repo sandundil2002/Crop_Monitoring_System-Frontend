@@ -129,6 +129,7 @@ $(document).ready(function () {
 
 $(document).on("click", ".btn-delete-vehicle", function () {
   const vehicleId = $(this).data("vehicle-id");
+
   swal({
     title: "Are you sure?",
     text: `Do you want to delete vehicle with ID: ${vehicleId}?`,

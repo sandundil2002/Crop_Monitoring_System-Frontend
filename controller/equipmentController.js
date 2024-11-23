@@ -4,7 +4,8 @@ import {
     getAllStaff,
     saveEquipment,
     searchEquipment,
-    updateEquipment
+    updateEquipment,
+    deleteEquipment,
 } from "../model/equipmentModel.js";
 
 $(document).ready(function () {
@@ -118,6 +119,25 @@ $(document).ready(function () {
     });
 
     loadEquipmentTable();
+});
+
+$(document).on("click", ".btn-delete-equipment", function () {
+    const equipmentId = $(this).data("equipment-id");
+
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this equipment!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            const promise = deleteEquipment(equipmentId);
+            promise.then(() => {
+                loadEquipmentTable();
+            });
+        }
+    });
 });
 
 async function loadEquipmentTable() {
