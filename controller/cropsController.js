@@ -1,6 +1,5 @@
-import { getAllCrops } from "../model/cropsModel.js";
+import { getAllCrops, getAllFields, saveCrop } from "../model/cropsModel.js";
 
-console.log(localStorage.getItem("authToken"));
 const cropScientificNames = {
   Rice: "Oryza sativa",
   Cowpea: "Vigna unguiculata",
@@ -16,6 +15,62 @@ $(document).ready(function () {
     const selectedCommonName = $(this).val();
     const scientificName = cropScientificNames[selectedCommonName];
     $(".cropScientificName").val(scientificName);
+  });
+
+  let selectedFields = [];
+  
+  $("#selectedFieldsList").on("click", ".remove-btn", function() {
+    const $listItem = $(this).closest("li");
+    const valueToRemove = $listItem.data("value");
+    $listItem.remove();
+    selectedFields = selectedFields.filter(value => value !== valueToRemove);
+    $(`#fieldId option[value="${valueToRemove}"]`).prop("selected", false);
+    console.log("Current selected fields:", selectedFields);
+  });
+  
+  $(".fieldId").change(function() {
+    const selectedOption = $(this).find("option:selected");
+    const value = selectedOption.val();
+    const text = selectedOption.text();
+
+    if (value && !selectedFields.includes(value)) {
+      selectedFields.push(value);
+
+      $("#selectedFieldsList").append(`
+            <li data-value="${value}">
+                ${text}
+                <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+        `);
+    }
+  });
+  
+  $("#btnSave").click(() => {
+    const commonName = $("#cropCommonName").val();
+    const scientificName = $("#cropScientificName").val();
+    const category = $("#cropCategory").val();
+    const season = $("#cropSeason").val();
+    const cropImg = $("#cropImg").prop("files")[0];
+    console.log("Selected fields:", selectedFields);
+    
+    const cropData = {
+      commonName: commonName,
+      scientificName: scientificName,
+      category: category,
+      season: season,
+      cropImg: cropImg,
+      fields: selectedFields, 
+    };
+
+    saveCrop(cropData).then(() => {
+      loadCropTable().then(() => {
+        $("#addCropModal").modal("hide");
+      });
+    }).catch(error => {
+      console.error("Failed to save crop data:", error);
+    });
   });
 
   $("#btn-edit-crop").on("click", function () {
@@ -85,5 +140,20 @@ async function loadCropTable() {
     });
   } catch (error) {
     console.error("Error loading crop table:", error);
+  } finally {
+    loadFieldIds();
   }
+}
+
+async function loadFieldIds() {
+  const fieldList = await getAllFields();
+    const fieldIdDropdown = $(".fieldId");
+    fieldIdDropdown.empty();
+    fieldIdDropdown.append(`<option value="" disabled selected>Select Field Id</option>`);
+
+    fieldList.forEach((field) => {
+      fieldIdDropdown.append(`
+        <option value="${field.fieldId}">${field.fieldId}</option>
+      `);
+    });
 }
