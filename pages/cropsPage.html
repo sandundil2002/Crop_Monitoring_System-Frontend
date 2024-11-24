@@ -32,7 +32,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="addCropModal">Add New Crop</h5>
+                    <h5 class="modal-title fw-bold">Add New Crop</h5>
                     <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -135,26 +135,26 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>C001</td>
-                    <td>Rice</td>
-                    <td>Oryza sativa</td>
-                    <td>F001</td>
-                    <td>Cereal</td>
-                    <td>Summer</td>
-                    <td><img src="path/to/image1.jpg" alt="Crop Image" class="img-thumbnail" style="max-width: 100px;">
-                    </td>
-                    <td>
-                        <button id="btn-edit-crop" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal"
-                            data-bs-target="#editCropModal">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button id="btn-delete-crop" class="btn btn-outline-danger btn-sm mb-1">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
+            <tbody id="cropTable">
+<!--                <tr>-->
+<!--                    <td>C001</td>-->
+<!--                    <td>Rice</td>-->
+<!--                    <td>Oryza sativa</td>-->
+<!--                    <td>F001</td>-->
+<!--                    <td>Cereal</td>-->
+<!--                    <td>Summer</td>-->
+<!--                    <td><img src="path/to/image1.jpg" alt="Crop Image" class="img-thumbnail" style="max-width: 100px;">-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <button id="btn-edit-crop" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal"-->
+<!--                            data-bs-target="#editCropModal">-->
+<!--                            <i class="bi bi-pencil"></i>-->
+<!--                        </button>-->
+<!--                        <button id="btn-delete-crop" class="btn btn-outline-danger btn-sm mb-1">-->
+<!--                            <i class="bi bi-trash"></i>-->
+<!--                        </button>-->
+<!--                    </td>-->
+<!--                </tr>-->
             </tbody>
         </table>
     </div>
@@ -234,7 +234,7 @@
         </div>
     </div>
 
-    <script src="../controller/cropsController.js"></script>
+    <script type="module" src="../controller/cropsController.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

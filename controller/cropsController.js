@@ -1,3 +1,6 @@
+import { getAllCrops } from "../model/cropsModel.js";
+
+console.log(localStorage.getItem("authToken"));
 const cropScientificNames = {
   Rice: "Oryza sativa",
   Cowpea: "Vigna unguiculata",
@@ -45,4 +48,42 @@ $(document).ready(function () {
     event.preventDefault();
     $("#editCropModal").modal("hide");
   });
+
+  loadCropTable();
 });
+
+async function loadCropTable() {
+  try {
+    const cropList = await getAllCrops();
+    const cropTable = $("#cropTable");
+    cropTable.empty();
+
+    cropList.forEach((crop) => {
+      const imageSrc = crop.cropImg
+          ? `data:image/jpeg;base64,${crop.cropImg}`
+          : "./assets/images/default-crop.png";
+
+      cropTable.append(`
+        <tr>
+          <td>${crop.cropId}</td>
+          <td>${crop.commonName}</td>
+          <td>${crop.scientificName}</td>
+          <td>${crop.fields || "-"}</td>
+          <td>${crop.category}</td>
+          <td>${crop.season}</td>
+          <td><img src="${imageSrc}" alt="Crop Image" width="50" height="50"></td>
+          <td>
+            <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${crop.cropId}" data-bs-toggle="modal" data-bs-target="#editCropModal">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${crop.cropId}">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `);
+    });
+  } catch (error) {
+    console.error("Error loading crop table:", error);
+  }
+}
