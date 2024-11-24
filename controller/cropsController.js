@@ -1,4 +1,4 @@
-import { getAllCrops, getAllFields, saveCrop } from "../model/cropsModel.js";
+import { getAllCrops, getAllFields, saveCrop, searchCrop } from "../model/cropsModel.js";
 
 const cropScientificNames = {
   Rice: "Oryza sativa",
@@ -72,6 +72,43 @@ $(document).ready(function () {
       console.error("Failed to save crop data:", error);
     });
   });
+  
+  $("#btnSearch").click(async function () {
+    try {
+      const cropId = $("#dropdownMenuButton").text().trim();
+      if (!cropId) {
+        swal("Warning!", "Please select a crop ID!", "info");
+        return;
+      }
+
+      $("#btnSearch").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...').prop("disabled", true);
+      const cropDetails = await searchCrop(cropId);
+      let cropArray = [];
+      if (cropDetails) {
+        if (Array.isArray(cropDetails)) {
+          cropArray = cropDetails;
+        } else if (typeof cropDetails === "object") {
+          cropArray = [cropDetails];
+        }
+      }
+
+      $("#cropTable").empty();
+      if (cropArray.length === 0) {
+        swal("Information", "No crop details found!", "info");
+        return;
+      }
+
+      cropArray.forEach(function (crop) {
+        const row = createCropTableRow(crop);
+        $(".table tbody").append(row);
+      });
+    } catch (error) {
+      console.error("Error retrieving crop details:", error);
+      swal("Error", `Failed to retrieve crop details: ${error.message}`, "error");
+    } finally {
+      $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
+    }
+  });
 
   $("#btn-edit-crop").on("click", function () {
     const row = $(this).closest("tr");
@@ -103,7 +140,6 @@ $(document).ready(function () {
     event.preventDefault();
     $("#editCropModal").modal("hide");
   });
-
   loadCropTable();
 });
 
@@ -141,8 +177,64 @@ async function loadCropTable() {
   } catch (error) {
     console.error("Error loading crop table:", error);
   } finally {
+    loadCropIds();
     loadFieldIds();
   }
+}
+
+async function loadCropIds() {
+  try {
+    const cropList = await getAllCrops();
+    const cropIdDropdown = $("#cropList");
+    cropIdDropdown.empty();
+
+    cropList.forEach((crop) => {
+        const cropId = crop.cropId;
+        const listItem = `
+            <li>
+            <a class="dropdown-item" href="#" data-value="${cropId}">
+                ${cropId}
+            </a>
+            </li>
+        `;
+        cropIdDropdown.append(listItem);
+    });
+
+    $("#cropList").on("click", ".dropdown-item", function (event) {
+        event.preventDefault();
+        const selectedId = $(this).data("value");
+        $("#dropdownMenuButton").text(selectedId);
+        $("#dropdownMenuButton").data("selected-id", selectedId);
+    });
+  } catch (error) {
+    console.error("Error loading crop IDs:", error);
+  }
+}
+
+function createCropTableRow(crop) {
+  const imageSrc = crop.cropImg
+    ? `data:image/jpeg;base64,${crop.cropImg}`
+    : "./assets/images/default-crop.png";
+
+  return `
+    <tr>
+      <td>${crop.cropId}</td>
+      <td>${crop.commonName}</td>
+      <td>${crop.scientificName}</td>
+      <td>${crop.fields || "-"}</td>
+      <td>${crop.category}</td>
+      <td>${crop.season}</td>
+      <td><img src="${imageSrc}" alt="Crop Image" width="50" height="50"></td>
+      <td>
+        <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${crop.cropId}" data-bs-toggle="modal" data-bs-target="#editCropModal">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${crop.cropId}">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `;
 }
 
 async function loadFieldIds() {

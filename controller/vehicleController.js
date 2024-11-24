@@ -74,7 +74,7 @@ $(document).ready(function () {
       const vehicleId = $("#dropdownMenuButton").text().trim();
 
       if (!vehicleId || vehicleId === "Search Vehicle By Id") {
-        swal("Warning!", "Please select a valid vehicle ID", "warning");
+        swal("Warning!", "Please select a valid vehicle ID", "info");
         return;
       }
 

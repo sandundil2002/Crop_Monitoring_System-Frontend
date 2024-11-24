@@ -25,13 +25,6 @@ export function saveCrop(cropData) {
     formData.append('cropImg', cropData.cropImg);
     formData.append('fields', JSON.stringify(cropData.fields));
 
-    console.log(formData.get('commonName'));
-    console.log(formData.get('scientificName'));
-    console.log(formData.get('category'));
-    console.log(formData.get('season'));
-    console.log(formData.get('cropImg'));
-    console.log(formData.get('fields'));
-
     return $.ajax({
         url: baseUrl,
         method: "POST",
@@ -49,6 +42,21 @@ export function saveCrop(cropData) {
             console.log("Error:", error.toString());
             swal("Error!", "Crop Save Failed", "error");
         }
+    });
+}
+
+export async function searchCrop(cropId) {
+    return $.ajax({
+        url: baseUrl + "/" + cropId,
+        method: "GET",
+        contentType: "json",
+        headers: {
+        Authorization: "Bearer " + token,
+        },
+
+        error: function (error) {
+        console.log("Error: " + error);
+        },
     });
 }
 
