@@ -39,7 +39,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addFieldForm">
+                    <div id="addFieldForm">
                         <div class="mb-3">
                             <label for="fieldName" class="form-label">Field Name</label>
                             <input type="text" class="form-control" id="fieldName" placeholder="Enter field name"
@@ -83,7 +83,7 @@
                             <label for="fieldImg2" class="form-label">Field Image 2</label>
                             <input type="file" class="form-control" id="fieldImg2" required>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -124,7 +124,6 @@
                     <th>Field Id</th>
                     <th>Field Name</th>
                     <th>Location (GPS)</th>
-                    <th>Crop Type</th>
                     <th>Size (sq. meters)</th>
                     <th>Staff Member</th>
                     <th>Field Image 1</th>
@@ -132,31 +131,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>F001</td>
-                    <td>Field 1</td>
-                    <td>37.7749° N, 122.4194° W</td>
-                    <td>Rice</td>
-                    <td>500</td>
-                    <td>S001</td>
-                    <td><img src="path/to/image1.jpg" alt="Field Image 1" class="img-thumbnail"
-                            style="max-width: 100px;">
-                    </td>
-                    <td><img src="path/to/image2.jpg" alt="Field Image 2" class="img-thumbnail"
-                            style="max-width: 100px;">
-                    </td>
-                    <td>
-                        <button id="btn-edit-field" class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal"
-                            data-bs-target="#editFieldModal">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button id="btn-delete-field" class="btn btn-outline-danger btn-sm mb-1">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
+            <tbody id="fieldTable"></tbody>
         </table>
     </div>
 
@@ -203,7 +178,7 @@
                                 required>
                         </div>
                         <div class="mb-3">
-                            <label for="editStaffMem" class="form-label">Staff Member</label>
+                            <label for="editStaff" class="form-label">Staff Member</label>
                             <select class="form-select" id="editStaff" required>
                                 <option selected disabled>Select allocated staff member</option>
                                 <option value="S001">S001</option>
@@ -228,7 +203,7 @@
         </div>
     </div>
 
-    <script src="../controller/fieldsController.js"></script>
+    <script type="module" src="../controller/fieldsController.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

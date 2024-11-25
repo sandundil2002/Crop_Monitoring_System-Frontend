@@ -1,3 +1,5 @@
+import {gelAllFields} from "../model/fieldModel.js";
+
 $(document).ready(function () {
   $(".dropdown-item").click(function () {
     var selectedValue = $(this).data("value");
@@ -31,4 +33,50 @@ $(document).ready(function () {
     event.preventDefault();
     $("#editFieldModal").modal("hide");
   });
+
+  loadFieldTable()
 });
+
+async function loadFieldTable() {
+  try {
+    const fieldList = await gelAllFields();
+    const fieldTable = $("#fieldTable");
+    fieldTable.empty();
+
+    fieldList.forEach((field) => {
+      const image1Src = field.fieldImg1
+          ? `data:image/png;base64,${field.fieldImg1}`
+          : "images/placeholder.png";
+
+      const image2Src = field.fieldImg2
+          ? `data:image/png;base64,${field.fieldImg2}`
+          : "images/placeholder.png";
+
+      const location = field.location
+          ? `${field.location.x}, ${field.location.y}`
+          : "N/A";
+
+      fieldTable.append(`
+        <tr>
+          <td>${field.fieldId}</td>
+          <td>${field.fieldName}</td>
+          <td>${location}</td>
+          <td>${field.size}</td>
+          <td>${field.staffs}</td>
+          <td><img src="${image1Src}" width="50" height="50" alt="field image1"></td>
+          <td><img src="${image2Src}" width="50" height="50" alt="field image2"></td>
+          <td>
+            <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-field mx-1" data-field-id="${field.fieldId}" data-bs-toggle="modal" data-bs-target="#editFieldModal">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-field" data-field-id="${field.fieldId}">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `);
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
