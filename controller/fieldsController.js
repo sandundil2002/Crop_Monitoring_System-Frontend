@@ -1,4 +1,4 @@
-import {gelAllFields, getAllStaff, saveField} from "../model/fieldModel.js";
+import {gelAllFields, getAllStaff, saveField ,searchField} from "../model/fieldModel.js";
 
 let selectedFields = [];
 
@@ -79,6 +79,68 @@ $(document).ready(function () {
         console.log("Error:", error);
     })
   })
+  
+  $("#btnSearch").click(async function () {
+    try {
+      const fieldId = $("#dropdownMenuButton").text().trim();
+      if (!fieldId) {
+        swal("Warning!", "Please select a field id", "info");
+        return;
+      }
+      
+      $("#btnSearch").html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`);
+        const fieldDetails = await searchField(fieldId);
+        let fieldArray = [];
+        if (fieldDetails){
+          if (Array.isArray(fieldDetails)){
+            fieldArray = fieldDetails;
+          } else if(typeof fieldDetails === "object"){
+            fieldArray = [fieldDetails];
+          }
+        }
+        
+        $("#fieldTable").empty();
+        if (fieldArray.length === 0){
+          swal("Warning!", "No field found with the given id", "info");
+          return;
+        }
+
+        fieldArray.forEach((field) => {
+          const image1Src = field.fieldImg1
+              ? `data:image/png;base64,${field.fieldImg1}`
+              : "images/placeholder.png";
+          const image2Src = field.fieldImg2
+              ? `data:image/png;base64,${field.fieldImg2}`
+              : "images/placeholder.png";
+          const location = field.location
+              ? `${field.location.x}, ${field.location.y}`
+              : "N/A";
+          $("#fieldTable").append(`
+            <tr>
+              <td>${field.fieldId}</td>
+              <td>${field.fieldName}</td>
+              <td>${location}</td>
+              <td>${field.size}</td>
+              <td>${field.staffs}</td>
+              <td><img src="${image1Src}" width="50" height="50" alt="field image1"></td>
+              <td><img src="${image2Src}" width="50" height="50" alt="field image2"></td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-field mx-1" data-field-id="${field.fieldId}" data-bs-toggle="modal" data-bs-target="#editFieldModal">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-field" data-field-id="${field.fieldId}">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `);
+        });
+    } catch (error) {
+        console.log("Error:", error);
+    } finally {
+        $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
+    }
+  });
 
   $("#btn-edit-field").on("click", function () {
     const row = $(this).closest("tr");
@@ -154,6 +216,33 @@ async function loadFieldTable() {
     console.log("Error:", error);
   } finally {
     loadStaffIds();
+    loadFieldIds();
+  }
+}
+
+async function loadFieldIds() {
+  try {
+    const fieldList = await gelAllFields();
+    const fieldSelect = $("#fieldList");
+    fieldSelect.empty();
+
+    fieldList.forEach((field) => {
+      const fieldId = field.fieldId;
+      const listItem = `
+      <li>
+        <a class="dropdown-item" href="#" data-value="${fieldId}">${fieldId}</a>
+       </li>`;
+        fieldSelect.append(listItem);
+    });
+    
+    $("#fieldList").on("click", ".dropdown-item", function (event) {
+        event.preventDefault();
+        const selectedValue = $(this).data("value");
+        $("#dropdownMenuButton").text(selectedValue);
+        $("#dropdownMenuButton").data("selected-id", selectedValue);
+    });
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
 

@@ -47,6 +47,21 @@ export function saveField(fieldData) {
     });
 }
 
+export async function searchField(fieldId) {
+    return $.ajax({
+        url: baseUrl + "/" + fieldId,
+        method: "GET",
+        contentType: "application/json",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        error: function (error) {
+            console.log("Error: " + error);
+        },
+    });
+}
+
 export function getAllStaff() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/staff",
