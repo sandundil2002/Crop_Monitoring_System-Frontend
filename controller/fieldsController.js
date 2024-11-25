@@ -1,4 +1,4 @@
-import {gelAllFields, getAllStaff, saveField ,searchField} from "../model/fieldModel.js";
+import {gelAllFields, getAllStaff, saveField, updateField, searchField} from "../model/fieldModel.js";
 
 let selectedFields = [];
 
@@ -78,7 +78,34 @@ $(document).ready(function () {
     }).catch((error) => {
         console.log("Error:", error);
     })
-  })
+  });
+  
+  $("#btnEdit").click(() => {
+    const fieldId = $("#editFieldId").val();
+    const fieldName = $("#editFieldName").val();
+    const fieldLocation = $("#editFieldLocation").val();
+    const fieldSize = $("#editFieldSize").val();
+    const fieldStaff = selectedFields;
+    const fieldImg1 = $("#editFieldImg1").prop("files")[0];
+    const fieldImg2 = $("#editFieldImg2").prop("files")[0];
+
+    const fieldData = {
+      fieldName: fieldName,
+      location: fieldLocation,
+      size: fieldSize,
+      staffs: fieldStaff,
+      fieldImg1: fieldImg1,
+      fieldImg2: fieldImg2,
+    };
+
+    updateField(fieldId, fieldData).then(() => {
+        loadFieldTable().then(() => {
+          $("#editFieldModal").modal("hide");
+        });
+    }).catch((error) => {
+        console.log("Error:", error);
+    });
+  });
   
   $("#btnSearch").click(async function () {
     try {
@@ -141,36 +168,44 @@ $(document).ready(function () {
         $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
     }
   });
+  loadFieldTable()
+});
 
-  $("#btn-edit-field").on("click", function () {
-    const row = $(this).closest("tr");
-    const fieldId = row.find("td:eq(0)").text();
-    const fieldName = row.find("td:eq(1)").text();
-    const fieldLocation = row.find("td:eq(2)").text();
-    const cropType = row.find("td:eq(3)").text();
-    const fieldSize = row.find("td:eq(4)").text();
-    const fieldStaff = row.find("td:eq(5)").text();
-    const fieldImg1 = row.find("td:eq(6)").text();
-    const fieldImg2 = row.find("td:eq(7)").text();
+$(document).on("click", ".btn-edit-field", function () {
+  const row = $(this).closest("tr");
+  const fieldId = row.find("td:eq(0)").text();
+  const fieldName = row.find("td:eq(1)").text();
+  const fieldLocation = row.find("td:eq(2)").text();
+  const fieldSize = row.find("td:eq(3)").text();
+  const fieldStaff = row.find("td:eq(4)").text();
 
-    $("#editFieldId").val(fieldId);
-    $("#editFieldName").val(fieldName);
-    $("#editFieldLocation").val(fieldLocation);
-    $("#editCropType").val(cropType);
-    $("#editFieldSize").val(fieldSize);
-    $("#editStaff").val(fieldStaff);
-    $("#editFieldImg1").val(fieldImg1);
-    $("#editFieldImg2").val(fieldImg2);
+  $("#editFieldId").val(fieldId);
+  $("#editFieldName").val(fieldName);
+  $("#editFieldLocation").val(fieldLocation);
+  $("#editFieldSize").val(fieldSize);
 
+  const staffIds = fieldStaff.split(",");
+  $("#editStaffId option").each(function () {
+    const value = $(this).val();
+    if (staffIds.includes(value)) {
+      $(this).prop("selected", staffIds.includes(value));
+    }
+
+    $("#updatedFieldsList").empty();
+    staffIds.forEach((field) => {
+      if (field) {
+        $("#updatedFieldsList").append(`
+                <li data-value="${field}">
+                    ${field}
+                    <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+            `);
+      }
+    });
     $("#editFieldModal").modal("show");
   });
-
-  $("#editFieldForm").on("submit", function (event) {
-    event.preventDefault();
-    $("#editFieldModal").modal("hide");
-  });
-
-  loadFieldTable()
 });
 
 async function loadFieldTable() {

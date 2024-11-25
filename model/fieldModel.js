@@ -47,6 +47,36 @@ export function saveField(fieldData) {
     });
 }
 
+export function updateField(fieldId, fieldData) {
+    const formData = new FormData();
+    formData.append("fieldName", fieldData.fieldName);
+    formData.append("location", fieldData.location);
+    formData.append("size", fieldData.size);
+    formData.append("staffs", JSON.stringify(fieldData.staffs));
+    formData.append("fieldImg1", fieldData.fieldImg1);
+    formData.append("fieldImg2", fieldData.fieldImg2);
+
+    return $.ajax({
+        url: baseUrl + "/" + fieldId,
+        method: "PATCH",
+        processData: false,
+        contentType: false,
+        data: formData,
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+            swal("Confirmation!", "Field Updated Successfully!", "success");
+        },
+
+        error: function (error) {
+            console.log("Error:", error.toString());
+            swal("Error!", "Field Update Failed", "error");
+        }
+    });
+}
+
 export async function searchField(fieldId) {
     return $.ajax({
         url: baseUrl + "/" + fieldId,
