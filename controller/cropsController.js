@@ -318,7 +318,7 @@ async function loadFieldIds() {
   const fieldList = await getAllFields();
     const fieldIdDropdown = $(".fieldId");
     fieldIdDropdown.empty();
-    fieldIdDropdown.append(`<option value="" disabled selected>Select Field Id</option>`);
+    fieldIdDropdown.append(`<option value="" disabled selected>Select Field Ids</option>`);
 
     fieldList.forEach((field) => {
       fieldIdDropdown.append(`

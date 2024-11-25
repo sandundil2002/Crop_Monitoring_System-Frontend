@@ -1,10 +1,84 @@
-import {gelAllFields} from "../model/fieldModel.js";
+import {gelAllFields, getAllStaff, saveField} from "../model/fieldModel.js";
+
+let selectedFields = [];
+
+$("#selectedFieldsList").on("click", ".remove-btn", function () {
+  const $listItem = $(this).closest("li");
+  const valueToRemove = $listItem.data("value");
+  $listItem.remove();
+  selectedFields = selectedFields.filter(value => value !== valueToRemove);
+  $(`#staffId option[value="${valueToRemove}"]`).prop("selected", false);
+  console.log("Current selected fields:", selectedFields);
+});
+
+$("#updatedFieldsList").on("click", ".remove-btn", function() {
+    const $listItem = $(this).closest("li");
+    const valueToRemove = $listItem.data("value");
+    $listItem.remove();
+    selectedFields = selectedFields.filter(value => value !== valueToRemove);
+    $(`#editFieldId option[value="${valueToRemove}"]`).prop("selected", false);
+    console.log("Current selected fields:", selectedFields);
+});
+
+$(".staffId").change(function () {
+  const selectedOption = $(this).find("option:selected");
+  const value = selectedOption.val();
+  const text = selectedOption.text();
+
+  if (value && !selectedFields.includes(value)) {
+    selectedFields.push(value);
+
+    $("#selectedFieldsList").append(`
+      <li data-value="${value}">
+        ${text}
+        <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+    `);
+
+    $("#updatedFieldsList").append(`
+            <li data-value="${value}">
+                ${text}
+                <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+    `);
+  }
+});
 
 $(document).ready(function () {
   $(".dropdown-item").click(function () {
     var selectedValue = $(this).data("value");
     $("#dropdownMenuButton").text(selectedValue);
   });
+
+  $("#btnSave").click(() => {
+    const fieldName = $("#fieldName").val();
+    const fieldLocation = $("#fieldLocation").val();
+    const fieldSize = $("#fieldSize").val();
+    const fieldStaff = selectedFields;
+    const fieldImg1 = $("#fieldImg1").prop("files")[0];
+    const fieldImg2 = $("#fieldImg2").prop("files")[0];
+
+    const fieldData = {
+      fieldName: fieldName,
+      location: fieldLocation,
+      size: fieldSize,
+      staffs: fieldStaff,
+      fieldImg1: fieldImg1,
+      fieldImg2: fieldImg2,
+    };
+
+    saveField(fieldData).then(() => {
+        loadFieldTable().then(() => {
+          $("addCropModal").modal("hide");
+        });
+    }).catch((error) => {
+        console.log("Error:", error);
+    })
+  })
 
   $("#btn-edit-field").on("click", function () {
     const row = $(this).closest("tr");
@@ -78,5 +152,18 @@ async function loadFieldTable() {
     });
   } catch (error) {
     console.log("Error:", error);
+  } finally {
+    loadStaffIds();
   }
+}
+
+async function loadStaffIds() {
+  const staffList = await getAllStaff();
+    const staffSelect = $(".staffId");
+    staffSelect.empty();
+    staffSelect.append(`<option value="" disabled selected>Select Staff Ids</option>`);
+
+    staffList.forEach((staff) => {
+        staffSelect.append(`<option value="${staff.staffId}">${staff.staffId}</option>`);
+    });
 }
