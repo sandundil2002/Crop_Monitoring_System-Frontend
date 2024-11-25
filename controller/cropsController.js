@@ -1,4 +1,4 @@
-import { getAllCrops, getAllFields, saveCrop, searchCrop } from "../model/cropsModel.js";
+import { getAllCrops, getAllFields, saveCrop, updateCrop, searchCrop } from "../model/cropsModel.js";
 
 const cropScientificNames = {
   Rice: "Oryza sativa",
@@ -27,6 +27,15 @@ $(document).ready(function () {
     $(`#fieldId option[value="${valueToRemove}"]`).prop("selected", false);
     console.log("Current selected fields:", selectedFields);
   });
+
+  $("#updatedFieldsList").on("click", ".remove-btn", function() {
+    const $listItem = $(this).closest("li");
+    const valueToRemove = $listItem.data("value");
+    $listItem.remove();
+    selectedFields = selectedFields.filter(value => value !== valueToRemove);
+    $(`#editFieldId option[value="${valueToRemove}"]`).prop("selected", false);
+    console.log("Current selected fields:", selectedFields);
+  });
   
   $(".fieldId").change(function() {
     const selectedOption = $(this).find("option:selected");
@@ -37,6 +46,15 @@ $(document).ready(function () {
       selectedFields.push(value);
 
       $("#selectedFieldsList").append(`
+            <li data-value="${value}">
+                ${text}
+                <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+        `);
+
+      $("#updatedFieldsList").append(`
             <li data-value="${value}">
                 ${text}
                 <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
@@ -70,6 +88,32 @@ $(document).ready(function () {
       });
     }).catch(error => {
       console.error("Failed to save crop data:", error);
+    });
+  });
+  
+  $("#btnEdit").click(() => {
+    const cropId = $("#editCropId").val();
+    const commonName = $("#editCropCommonName").val();
+    const scientificName = $("#editCropScientificName").val();
+    const category = $("#editCropCategory").val();
+    const season = $("#editCropSeason").val();
+    const cropImg = $("#editCropImg").prop("files")[0];
+
+    const cropData = {
+      commonName: commonName,
+      scientificName: scientificName,
+      category: category,
+      season: season,
+      cropImg: cropImg,
+      fields: selectedFields, 
+    };
+
+    updateCrop(cropId, cropData).then(() => {
+      loadCropTable().then(() => {
+        $("#editCropModal").modal("hide");
+      });
+    }).catch(error => {
+      console.error("Failed to update crop data:", error);
     });
   });
   
@@ -110,7 +154,7 @@ $(document).ready(function () {
     }
   });
 
-  $("#btn-edit-crop").on("click", function () {
+  $(document).on("click", ".btn-edit-crop", function () {
     const row = $(this).closest("tr");
     const cropId = row.find("td:eq(0)").text();
     const cropCommonName = row.find("td:eq(1)").text();
@@ -118,28 +162,36 @@ $(document).ready(function () {
     const fieldType = row.find("td:eq(3)").text();
     const cropCategory = row.find("td:eq(4)").text();
     const cropSeason = row.find("td:eq(5)").text();
-    const cropImg = row.find("td:eq(6)").text();
-
+    
     $("#editCropId").val(cropId);
-    $("#editFieldType").val(fieldType);
     $("#editCropCommonName").val(cropCommonName);
     $("#editCropScientificName").val(cropScientificName);
     $("#editCropCategory").val(cropCategory);
     $("#editCropSeason").val(cropSeason);
-    $("#editCropImg").val(cropImg);
 
+    const selectedFields = fieldType.split(",");
+    $("#editFieldId option").each(function () {
+      const optionValue = $(this).val();
+      $(this).prop("selected", selectedFields.includes(optionValue));
+    });
+
+    $("#updatedFieldsList").empty(); 
+    selectedFields.forEach((field) => {
+      if (field) { 
+        $("#updatedFieldsList").append(`
+                <li data-value="${field}">
+                    ${field}
+                    <button type="button" class="remove-btn btn btn-danger btn-sm mt-1 ms-2">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+            `);
+      }
+    });
+    
     $("#editCropModal").modal("show");
   });
-
-  $(".dropdown-item").click(function () {
-    var selectedValue = $(this).data("value");
-    $("#dropdownMenuButton").text(selectedValue);
-  });
-
-  $("#editCropForm").on("submit", function (event) {
-    event.preventDefault();
-    $("#editCropModal").modal("hide");
-  });
+  
   loadCropTable();
 });
 

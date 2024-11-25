@@ -45,6 +45,36 @@ export function saveCrop(cropData) {
     });
 }
 
+export function updateCrop(cropId, cropData) {
+    const formData = new FormData();
+    formData.append('commonName', cropData.commonName);
+    formData.append('scientificName', cropData.scientificName);
+    formData.append('category', cropData.category);
+    formData.append('season', cropData.season);
+    formData.append('cropImg', cropData.cropImg);
+    formData.append('fields', JSON.stringify(cropData.fields));
+    console.log(cropData.cropImg)
+
+    return $.ajax({
+        url: baseUrl + "/" + cropId,
+        method: "PATCH",
+        processData: false,
+        contentType: false,
+        data: formData,
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+            swal("Confirmation!", "Crop Updated Successfully!", "success");
+        },
+        error: function (error) {
+            console.log("Error:", error.toString());
+            swal("Error!", "Crop Update Failed", "error");
+        }
+    });
+}
+
 export async function searchCrop(cropId) {
     return $.ajax({
         url: baseUrl + "/" + cropId,
