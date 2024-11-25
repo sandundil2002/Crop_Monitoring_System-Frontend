@@ -1,4 +1,4 @@
-import {gelAllFields, getAllStaff, saveField, updateField, searchField} from "../model/fieldModel.js";
+import {gelAllFields, getAllStaff, saveField, updateField, searchField, deleteField} from "../model/fieldModel.js";
 
 let selectedFields = [];
 
@@ -206,6 +206,33 @@ $(document).on("click", ".btn-edit-field", function () {
     });
     $("#editFieldModal").modal("show");
   });
+});
+
+$(document).on("click", ".btn-delete-field", function () {
+    const fieldId = $(this).data("field-id");
+
+  swal({
+    title: "Are you sure?",
+    text: `Do you want to delete field with ID: ${fieldId}?`,
+    icon: "warning",
+    buttons: {
+      cancel: "Cancel",
+      confirm: {
+        text: "Delete",
+        visible: true,
+        className: "btn-danger",
+      },
+    },
+    }).then( (willDelete) => {
+        if (willDelete) {
+            const promise = deleteField(fieldId);
+            promise.then(() => {
+                loadFieldTable();
+            }).catch((error) => {
+                console.log("Error:", error);
+            });
+        }
+    })
 });
 
 async function loadFieldTable() {

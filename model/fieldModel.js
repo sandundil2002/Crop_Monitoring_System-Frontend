@@ -92,6 +92,26 @@ export async function searchField(fieldId) {
     });
 }
 
+export function deleteField(fieldId) {
+    return $.ajax({
+        url: baseUrl + "/" + fieldId,
+        method: "DELETE",
+        contentType: "application/json",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+            swal("Confirmation!", "Field Deleted Successfully!", "success");
+        },
+
+        error: function (error) {
+            console.log("Error:", error.toString());
+            swal("Error!", "Field Delete Failed", "error");
+        }
+    });
+}
+
 export function getAllStaff() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/staff",
