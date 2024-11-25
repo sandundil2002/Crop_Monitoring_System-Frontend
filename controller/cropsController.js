@@ -1,4 +1,4 @@
-import { getAllCrops, getAllFields, saveCrop, updateCrop, searchCrop } from "../model/cropsModel.js";
+import { getAllCrops, getAllFields, saveCrop, updateCrop, searchCrop, deleteCrop } from "../model/cropsModel.js";
 
 const cropScientificNames = {
   Rice: "Oryza sativa",
@@ -193,6 +193,31 @@ $(document).ready(function () {
   });
   
   loadCropTable();
+});
+
+$(document).on("click", ".btn-delete-crop", function () {
+    const cropId = $(this).data("crop-id");
+
+    swal({
+        title: "Are you sure?",
+        text: `Do you want to delete crop with ID: ${cropId}?`,
+        icon: "warning",
+        buttons: {
+            cancel: "Cancel",
+            confirm: {
+                text: "Delete",
+                visible: true,
+                className: "btn-danger",
+            },
+        },
+    }).then((willDelete) => {
+        if (willDelete) {
+            const promise = deleteCrop(cropId);
+            promise.then(() => {
+                loadCropTable();
+            });
+        }
+    });
 });
 
 async function loadCropTable() {

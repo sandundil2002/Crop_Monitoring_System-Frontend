@@ -90,6 +90,25 @@ export async function searchCrop(cropId) {
     });
 }
 
+export function deleteCrop(cropId) {
+    return $.ajax({
+        url: baseUrl + "/" + cropId,
+        method: "DELETE",
+        contentType: "application/json",
+        headers: {
+        Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+        swal("Confirmation!", "Crop Deleted Successfully!", "success");
+        },
+
+        error: function (error) {
+        console.log("Error: " + error);
+        },
+    });
+}
+
 export function getAllFields() {
     return $.ajax({
         url:  "http://localhost:8080/cms/api/v1/field",
