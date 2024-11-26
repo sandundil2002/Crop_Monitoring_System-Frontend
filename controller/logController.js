@@ -1,3 +1,5 @@
+import { getAllLogs } from "../model/logModel.js";
+
 $(document).ready(function () {
   $("#btn-edit-log").on("click", function () {
     const row = $(this).closest("tr");
@@ -19,4 +21,46 @@ $(document).ready(function () {
 
     $("#editLogModal").modal("show");
   });
+
+  loadLogTable()
 });
+
+async function loadLogTable() {
+  try {
+    const logList = await getAllLogs();
+    const logTable = $("#logTable");
+    logTable.empty();
+
+    logList.forEach((log) => {
+      const imageSrc = log.observedImg
+        ? `data:image/jpeg;base64,${log.observedImg}`
+        : "assets/img/no-image.png";
+
+        logTable.append(
+            `<tr>
+            <td>${log.logId}</td>
+            <td>${log.fieldId}</td>
+            <td>${log.cropId}</td>
+            <td>${log.staff}</td>
+            <td>${log.temperature}</td>
+            <td>${log.details}</td>
+            <td><img src="${imageSrc}" width="50" height="50"></td>
+            <td>${log.date}</td>
+            <td>
+            <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-log mx-1" data-log-id="${log.logId}" data-bs-toggle="modal" data-bs-target="#editLogModal">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-log" data-log-id="${log.logId}">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>`
+        );
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  } finally {
+
+  }
+  
+}
