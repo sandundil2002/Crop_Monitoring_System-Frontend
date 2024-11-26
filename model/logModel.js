@@ -44,6 +44,34 @@ export function saveLog(logData) {
     });
 }
 
+export function updateLog(logId, logData) {
+    const formData = new FormData();
+    formData.append("fieldId", logData.fieldId);
+    formData.append("cropId", logData.cropId);
+    formData.append("temperature", logData.temperature);
+    formData.append("details", logData.details);
+    formData.append("observedImg", logData.observedImg);
+
+    return $.ajax({
+        url: baseUrl + "/" + logId,
+        method: "PATCH",
+        processData: false,
+        contentType: false,
+        data: formData,
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+            swal("Confirmation!", "Log Updated Successfully!", "success");
+        },
+        error: function (error) {
+            console.log("Error:", error.toString());
+            swal("Error!", "Log Update Failed", "error");
+        }
+    });
+}
+
 export function searchLog(logId) {
     return $.ajax({
         url: baseUrl + "/" + logId,
@@ -55,6 +83,25 @@ export function searchLog(logId) {
 
         error: function (error) {
             console.log("Error: " + error);
+        }
+    });
+}
+
+export function deleteLog(logId) {
+    return $.ajax({
+        url: baseUrl + "/" + logId,
+        method: "DELETE",
+        contentType: "application/json",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        success: function () {
+            swal("Confirmation!", "Log Deleted Successfully!", "success");
+        },
+        error: function (error) {
+            console.log("Error:", error.toString());
+            swal("Error!", "Log Delete Failed", "error");
         }
     });
 }

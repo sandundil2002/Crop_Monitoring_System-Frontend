@@ -1,4 +1,4 @@
-import { getAllLogs, getAllFields, getAllCrops, saveLog, searchLog } from "../model/logModel.js";
+import {getAllLogs, getAllFields, getAllCrops, saveLog, searchLog, updateLog, deleteLog } from "../model/logModel.js";
 
 $(document).ready(function () {
   $("#btnSave").click(() => {
@@ -15,29 +15,44 @@ $(document).ready(function () {
         $("#addLogModal").modal("hide");
       });
     });
-  })
+  });
 
-  $("#btn-edit-log").on("click", function () {
+  $("#btnUpdate").click(() => {
+      const logId = $("#editLogId").val();
+        const logData = {
+            fieldId: $("#editFieldId").val(),
+          cropId: $("#editCropId").val(),
+          temperature: $("#editTemperature").val(),
+          details: $("#editObservations").val(),
+          observedImg: $("#editObservedImg").prop("files")[0],
+        };
+
+        updateLog(logId, logData).then(() => {
+          loadLogTable().then(() => {
+            $("#editLogModal").modal("hide");
+          });
+        });
+    });
+  loadLogTable()
+});
+
+$(document).on("click", ".btn-edit-log", function () {
     const row = $(this).closest("tr");
     const logId = row.find("td:eq(0)").text();
     const fieldId = row.find("td:eq(1)").text();
     const cropId = row.find("td:eq(2)").text();
-    const userId = row.find("td:eq(3)").text();
-    const condition = row.find("td:eq(4)").text();
+    const staffId = row.find("td:eq(3)").text();
+    const temperature = row.find("td:eq(4)").text();
     const observations = row.find("td:eq(5)").text();
-    const observedImg = row.find("td:eq(6)").text();
 
     $("#editLogId").val(logId);
     $("#editFieldId").val(fieldId);
-    $("#editCropType").val(cropId);
-    $("#editUserId").val(userId);
-    $("#editWeather").val(condition);
+    $("#editCropId").val(cropId);
+    $("#editStaffId").val(staffId);
+    $("#editTemperature").val(temperature.split("°")[0]);
     $("#editObservations").val(observations);
-    $("#editObservedimg").val(observedImg);
 
     $("#editLogModal").modal("show");
-  });
-  loadLogTable()
 });
 
 $("#btnSearch").click(async function () {
@@ -88,6 +103,24 @@ $("#btnSearch").click(async function () {
     } finally {
         $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
     }
+});
+
+$(document).on("click", ".btn-delete-log", function () {
+    const logId = $(this).data("log-id");
+
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this log!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            deleteLog(logId).then(() => {
+                loadLogTable();
+            });
+        }
+    });
 });
 
 async function loadLogTable() {
