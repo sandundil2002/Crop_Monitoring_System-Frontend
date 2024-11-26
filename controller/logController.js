@@ -1,4 +1,4 @@
-import { getAllLogs, getAllFields, getAllCrops, saveLog } from "../model/logModel.js";
+import { getAllLogs, getAllFields, getAllCrops, saveLog, searchLog } from "../model/logModel.js";
 
 $(document).ready(function () {
   $("#btnSave").click(() => {
@@ -37,8 +37,57 @@ $(document).ready(function () {
 
     $("#editLogModal").modal("show");
   });
-
   loadLogTable()
+});
+
+$("#btnSearch").click(async function () {
+    try {
+        const logId = $("#dropdownMenuButton").text().trim();
+        if (!logId) {
+            swal("Warning!", "Please enter a log ID to search", "info");
+            return;
+        }
+
+        $("#btnSearch").html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`).prop("disabled", true);
+
+        const log = await searchLog(logId);
+        $("#logTable").empty();
+
+        if (!log) {
+            swal("Warning!", "No log found with the given ID", "info");
+            return;
+        }
+
+        const imageSrc = log.observedImg
+            ? `data:image/jpeg;base64,${log.observedImg}`
+            : "assets/img/no-image.png";
+
+        $("#logTable").append(`
+      <tr>
+        <td>${log.logId}</td>
+        <td>${log.fieldId}</td>
+        <td>${log.cropId}</td>
+        <td>${log.staff}</td>
+        <td>${log.temperature}°C</td>
+        <td>${log.details}</td>
+        <td><img src="${imageSrc}" width="50" height="50" alt="Observed Image"></td>
+        <td>${log.date}</td>
+        <td>
+          <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-log mx-1" data-log-id="${log.logId}" data-bs-toggle="modal" data-bs-target="#editLogModal">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-log" data-log-id="${log.logId}">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `);
+    } catch (error) {
+        console.log("Error:", error);
+        swal("Error!", "Something went wrong while fetching the log details", "error");
+    } finally {
+        $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
+    }
 });
 
 async function loadLogTable() {
@@ -76,9 +125,29 @@ async function loadLogTable() {
   } catch (error) {
     console.log("Error:", error);
   } finally {
+    loadLogIds();
     loadFieldIds();
     loadCropIds();
   }
+}
+
+async function loadLogIds() {
+    const logList = await getAllLogs();
+    const logIdDropdown = $("#logList");
+    logIdDropdown.empty();
+    
+    logList.forEach((log) => {
+        const logId = log.logId;
+        const listItem = `<li> <a class="dropdown-item" href="#" data-value="${logId}">${logId}</a></li>`;
+        logIdDropdown.append(listItem);
+    });
+    
+    $("#logList").on("click", ".dropdown-item", function (event) {
+      event.preventDefault();
+        const selectedId = $(this).data("value");
+        $("#dropdownMenuButton").text(selectedId);
+        $("#dropdownMenuButton").data("selected-id", selectedId);
+    })
 }
 
 async function loadFieldIds() {

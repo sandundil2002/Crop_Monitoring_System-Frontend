@@ -44,6 +44,21 @@ export function saveLog(logData) {
     });
 }
 
+export function searchLog(logId) {
+    return $.ajax({
+        url: baseUrl + "/" + logId,
+        method: "GET",
+        contentType: "application/json",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+
+        error: function (error) {
+            console.log("Error: " + error);
+        }
+    });
+}
+
 export function getAllFields() {
     return $.ajax({
         url: "http://localhost:8080/cms/api/v1/field",
