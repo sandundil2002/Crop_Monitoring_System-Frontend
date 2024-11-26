@@ -40,44 +40,30 @@
                     <div id="addLogForm">
                         <div class="mb-3">
                             <label for="fieldId" class="form-label">Monitoring Field</label>
-                            <select class="form-select" id="fieldId" required>
-                                <option selected disabled>Select field Id</option>
-                                <option value="F001">Field 1</option>
-                                <option value="F002">Field 2</option>
-                            </select>
+                            <select class="form-select fieldId" id="fieldId" required> </select>
                         </div>
                         <div class="mb-3">
-                            <label for="userId" class="form-label">User Id</label>
-                            <input type="text" class="form-control" id="userId" readonly>
+                            <label for="cropId" class="form-label">Monitoring Crop</label>
+                            <select class="form-select cropId" id="cropId" required> </select>
                         </div>
                         <div class="mb-3">
-                            <label for="weather" class="form-label">Weather Condition</label>
-                            <select class="form-select" id="weather" required>
-                                <option selected disabled>Select weather type</option>
-                                <option value="Cloudy">Cloudy</option>
-                                <option value="Rainy ">Rainy</option>
-                                <option value="Drizzle">Drizzle</option>
-                                <option value="Windy">Windy</option>
-                                <option value="Dry">Dry</option>
-                                <option value="Cold">Cold</option>
-                                <option value="Humid">Humid</option>
-                                <option value="Drought">Drought</option>
-                            </select>
+                            <label for="temperature" class="form-label">Temperature</label>
+                            <input type="number" class="form-control" id="temperature" placeholder="Please input field temperature" required>
                         </div>
                         <div class="mb-3">
                             <label for="observations" class="form-label">Observation Details</label>
-                            <input type="text" class="form-control" id="observations"
+                            <input type="text" class="form-control text-capitalize" id="observations"
                                 placeholder="Please input crop observations" required>
                         </div>
                         <div class="mb-3">
-                            <label for="observedimg" class="form-label">Observed Image </label>
-                            <input type="file" class="form-control" id="observedimg" required>
+                            <label for="observedImg" class="form-label">Observed Image </label>
+                            <input type="file" class="form-control" id="observedImg" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="addLogForm" class="btn btn-success">Add New Log</button>
+                    <button type="submit" form="addLogForm" class="btn btn-success" id="btnSave">Add New Log</button>
                 </div>
             </div>
         </div>
@@ -113,7 +99,7 @@
                     <th>Field Id</th>
                     <th>Crop Id</th>
                     <th>Staff Ids</th>
-                    <th>Weather Condition</th>
+                    <th>Temperature (°C)</th>
                     <th>Observation Details</th>
                     <th>Observed Image</th>
                     <th>Date & Time</th>
@@ -140,28 +126,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="editFieldId" class="form-label">Monitoring Field</label>
-                            <select class="form-select" id="editFieldId" required>
-                                <option selected disabled>Select field Id</option>
-                                <option value="F001">Field 1</option>
-                                <option value="F002">Field 2</option>
-                            </select>
+                            <select class="form-select fieldId" id="editFieldId" required> </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editCropType" class="form-label">Crop Type</label>
-                            <select class="form-select cropCommonName" id="editCropType" required>
-                                <option selected disabled>Select crop type</option>
-                                <option value="Rice">Rice</option>
-                                <option value="Cowpea">Cowpea</option>
-                                <option value="GreenGram">Green gram</option>
-                                <option value="Chickpea">Chickpea</option>
-                                <option value="SweetPotato">Sweet potato</option>
-                                <option value="Reddish">Reddish</option>
-                                <option value="Cassava">Cassava</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editUserId" class="form-label">User Id</label>
-                            <input type="text" class="form-control" id="editUserId" readonly>
+                            <label for="editCropId" class="form-label">Monitoring Crop</label>
+                            <select class="form-select cropId" id="editCropId" required> </select>
                         </div>
                         <div class="mb-3">
                             <label for="editWeather" class="form-label">Weather Condition</label>

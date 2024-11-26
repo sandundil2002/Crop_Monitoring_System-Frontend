@@ -1,6 +1,22 @@
-import { getAllLogs } from "../model/logModel.js";
+import { getAllLogs, getAllFields, getAllCrops, saveLog } from "../model/logModel.js";
 
 $(document).ready(function () {
+  $("#btnSave").click(() => {
+    const logData = {
+      fieldId: $("#fieldId").val(),
+      cropId: $("#cropId").val(),
+      temperature: $("#temperature").val(),
+      details: $("#observations").val(),
+      observedImg: $("#observedImg").prop("files")[0],
+    };
+
+    saveLog(logData).then(() => {
+      loadLogTable().then(() => {
+        $("#addLogModal").modal("hide");
+      });
+    });
+  })
+
   $("#btn-edit-log").on("click", function () {
     const row = $(this).closest("tr");
     const logId = row.find("td:eq(0)").text();
@@ -42,7 +58,7 @@ async function loadLogTable() {
             <td>${log.fieldId}</td>
             <td>${log.cropId}</td>
             <td>${log.staff}</td>
-            <td>${log.temperature}</td>
+            <td>${log.temperature}°C</td>
             <td>${log.details}</td>
             <td><img src="${imageSrc}" width="50" height="50"></td>
             <td>${log.date}</td>
@@ -60,7 +76,33 @@ async function loadLogTable() {
   } catch (error) {
     console.log("Error:", error);
   } finally {
-
+    loadFieldIds();
+    loadCropIds();
   }
-  
+}
+
+async function loadFieldIds() {
+  const fieldList = await getAllFields();
+  const fieldIdDropdown = $(".fieldId");
+  fieldIdDropdown.empty();
+  fieldIdDropdown.append(`<option value="" disabled selected>Select Field Id</option>`);
+
+  fieldList.forEach((field) => {
+    fieldIdDropdown.append(`
+        <option value="${field.fieldId}">${field.fieldId}</option>
+      `);
+  });
+}
+
+async function loadCropIds() {
+    const cropList = await getAllCrops();
+    const cropIdDropdown = $(".cropId");
+    cropIdDropdown.empty();
+    cropIdDropdown.append(`<option value="" disabled selected>Select Crop Id</option>`);
+
+    cropList.forEach((crop) => {
+        cropIdDropdown.append(`
+            <option value="${crop.cropId}">${crop.cropId}</option>
+        `);
+    });
 }
