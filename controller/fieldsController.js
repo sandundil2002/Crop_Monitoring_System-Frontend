@@ -1,4 +1,11 @@
-import {gelAllFields, getAllStaff, saveField, updateField, searchField, deleteField} from "../model/fieldModel.js";
+import {
+  gelAllFields,
+  getAllStaff,
+  saveField,
+  updateField,
+  searchField,
+  deleteField,
+} from "../model/fieldModel.js";
 
 let selectedFields = [];
 
@@ -6,18 +13,18 @@ $("#selectedFieldsList").on("click", ".remove-btn", function () {
   const $listItem = $(this).closest("li");
   const valueToRemove = $listItem.data("value");
   $listItem.remove();
-  selectedFields = selectedFields.filter(value => value !== valueToRemove);
+  selectedFields = selectedFields.filter((value) => value !== valueToRemove);
   $(`#staffId option[value="${valueToRemove}"]`).prop("selected", false);
   console.log("Current selected fields:", selectedFields);
 });
 
-$("#updatedFieldsList").on("click", ".remove-btn", function() {
-    const $listItem = $(this).closest("li");
-    const valueToRemove = $listItem.data("value");
-    $listItem.remove();
-    selectedFields = selectedFields.filter(value => value !== valueToRemove);
-    $(`#editFieldId option[value="${valueToRemove}"]`).prop("selected", false);
-    console.log("Current selected fields:", selectedFields);
+$("#updatedFieldsList").on("click", ".remove-btn", function () {
+  const $listItem = $(this).closest("li");
+  const valueToRemove = $listItem.data("value");
+  $listItem.remove();
+  selectedFields = selectedFields.filter((value) => value !== valueToRemove);
+  $(`#editFieldId option[value="${valueToRemove}"]`).prop("selected", false);
+  console.log("Current selected fields:", selectedFields);
 });
 
 $(".staffId").change(function () {
@@ -71,15 +78,17 @@ $(document).ready(function () {
       fieldImg2: fieldImg2,
     };
 
-    saveField(fieldData).then(() => {
+    saveField(fieldData)
+      .then(() => {
         loadFieldTable().then(() => {
           $("addCropModal").modal("hide");
         });
-    }).catch((error) => {
+      })
+      .catch((error) => {
         console.log("Error:", error);
-    })
+      });
   });
-  
+
   $("#btnEdit").click(() => {
     const fieldId = $("#editFieldId").val();
     const fieldName = $("#editFieldName").val();
@@ -98,15 +107,17 @@ $(document).ready(function () {
       fieldImg2: fieldImg2,
     };
 
-    updateField(fieldId, fieldData).then(() => {
+    updateField(fieldId, fieldData)
+      .then(() => {
         loadFieldTable().then(() => {
           $("#editFieldModal").modal("hide");
         });
-    }).catch((error) => {
+      })
+      .catch((error) => {
         console.log("Error:", error);
-    });
+      });
   });
-  
+
   $("#btnSearch").click(async function () {
     try {
       const fieldId = $("#dropdownMenuButton").text().trim();
@@ -114,35 +125,37 @@ $(document).ready(function () {
         swal("Warning!", "Please select a field id", "info");
         return;
       }
-      
-      $("#btnSearch").html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`);
-        const fieldDetails = await searchField(fieldId);
-        let fieldArray = [];
-        if (fieldDetails){
-          if (Array.isArray(fieldDetails)){
-            fieldArray = fieldDetails;
-          } else if(typeof fieldDetails === "object"){
-            fieldArray = [fieldDetails];
-          }
-        }
-        
-        $("#fieldTable").empty();
-        if (fieldArray.length === 0){
-          swal("Warning!", "No field found with the given id", "info");
-          return;
-        }
 
-        fieldArray.forEach((field) => {
-          const image1Src = field.fieldImg1
-              ? `data:image/png;base64,${field.fieldImg1}`
-              : "images/placeholder.png";
-          const image2Src = field.fieldImg2
-              ? `data:image/png;base64,${field.fieldImg2}`
-              : "images/placeholder.png";
-          const location = field.location
-              ? `${field.location.x}, ${field.location.y}`
-              : "N/A";
-          $("#fieldTable").append(`
+      $("#btnSearch").html(
+        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`
+      );
+      const fieldDetails = await searchField(fieldId);
+      let fieldArray = [];
+      if (fieldDetails) {
+        if (Array.isArray(fieldDetails)) {
+          fieldArray = fieldDetails;
+        } else if (typeof fieldDetails === "object") {
+          fieldArray = [fieldDetails];
+        }
+      }
+
+      $("#fieldTable").empty();
+      if (fieldArray.length === 0) {
+        swal("Warning!", "No field found with the given id", "info");
+        return;
+      }
+
+      fieldArray.forEach((field) => {
+        const image1Src = field.fieldImg1
+          ? `data:image/png;base64,${field.fieldImg1}`
+          : "images/placeholder.png";
+        const image2Src = field.fieldImg2
+          ? `data:image/png;base64,${field.fieldImg2}`
+          : "images/placeholder.png";
+        const location = field.location
+          ? `${field.location.x}, ${field.location.y}`
+          : "N/A";
+        $("#fieldTable").append(`
             <tr>
               <td>${field.fieldId}</td>
               <td>${field.fieldName}</td>
@@ -161,14 +174,16 @@ $(document).ready(function () {
               </td>
             </tr>
           `);
-        });
+      });
     } catch (error) {
-        console.log("Error:", error);
+      console.log("Error:", error);
     } finally {
-        $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
+      $("#btnSearch")
+        .html('<i class="bi bi-search"></i>')
+        .prop("disabled", false);
     }
   });
-  loadFieldTable()
+  loadFieldTable();
 });
 
 $(document).on("click", ".btn-edit-field", function () {
@@ -209,7 +224,7 @@ $(document).on("click", ".btn-edit-field", function () {
 });
 
 $(document).on("click", ".btn-delete-field", function () {
-    const fieldId = $(this).data("field-id");
+  const fieldId = $(this).data("field-id");
 
   swal({
     title: "Are you sure?",
@@ -223,16 +238,18 @@ $(document).on("click", ".btn-delete-field", function () {
         className: "btn-danger",
       },
     },
-    }).then( (willDelete) => {
-        if (willDelete) {
-            const promise = deleteField(fieldId);
-            promise.then(() => {
-                loadFieldTable();
-            }).catch((error) => {
-                console.log("Error:", error);
-            });
-        }
-    })
+  }).then((willDelete) => {
+    if (willDelete) {
+      const promise = deleteField(fieldId);
+      promise
+        .then(() => {
+          loadFieldTable();
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    }
+  });
 });
 
 async function loadFieldTable() {
@@ -243,16 +260,16 @@ async function loadFieldTable() {
 
     fieldList.forEach((field) => {
       const image1Src = field.fieldImg1
-          ? `data:image/png;base64,${field.fieldImg1}`
-          : "images/placeholder.png";
+        ? `data:image/png;base64,${field.fieldImg1}`
+        : "images/placeholder.png";
 
       const image2Src = field.fieldImg2
-          ? `data:image/png;base64,${field.fieldImg2}`
-          : "images/placeholder.png";
+        ? `data:image/png;base64,${field.fieldImg2}`
+        : "images/placeholder.png";
 
       const location = field.location
-          ? `${field.location.x}, ${field.location.y}`
-          : "N/A";
+        ? `${field.location.x}, ${field.location.y}`
+        : "N/A";
 
       fieldTable.append(`
         <tr>
@@ -294,14 +311,14 @@ async function loadFieldIds() {
       <li>
         <a class="dropdown-item" href="#" data-value="${fieldId}">${fieldId}</a>
        </li>`;
-        fieldSelect.append(listItem);
+      fieldSelect.append(listItem);
     });
-    
+
     $("#fieldList").on("click", ".dropdown-item", function (event) {
-        event.preventDefault();
-        const selectedValue = $(this).data("value");
-        $("#dropdownMenuButton").text(selectedValue);
-        $("#dropdownMenuButton").data("selected-id", selectedValue);
+      event.preventDefault();
+      const selectedValue = $(this).data("value");
+      $("#dropdownMenuButton").text(selectedValue);
+      $("#dropdownMenuButton").data("selected-id", selectedValue);
     });
   } catch (error) {
     console.error("Error:", error);
@@ -310,11 +327,15 @@ async function loadFieldIds() {
 
 async function loadStaffIds() {
   const staffList = await getAllStaff();
-    const staffSelect = $(".staffId");
-    staffSelect.empty();
-    staffSelect.append(`<option value="" disabled selected>Select Staff Ids</option>`);
+  const staffSelect = $(".staffId");
+  staffSelect.empty();
+  staffSelect.append(
+    `<option value="" disabled selected>Select Staff Ids</option>`
+  );
 
-    staffList.forEach((staff) => {
-        staffSelect.append(`<option value="${staff.staffId}">${staff.staffId}</option>`);
-    });
+  staffList.forEach((staff) => {
+    staffSelect.append(
+      `<option value="${staff.staffId}">${staff.staffId}</option>`
+    );
+  });
 }

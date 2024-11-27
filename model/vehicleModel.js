@@ -11,7 +11,7 @@ export function getAllVehicles() {
     },
 
     error: function (error) {
-      console.log("Error: " + error);
+      console.log(error);
     },
   });
 }
@@ -23,16 +23,24 @@ export function saveVehicle(vehicle) {
     contentType: "application/json",
     data: JSON.stringify(vehicle),
     headers: {
-      Authorization: `Bearer ` + token,
+      Authorization: "Bearer " + token,
     },
 
     success: function () {
       swal("Confirmation!", "Vehicle Saved Successfully!", "success");
     },
 
-    error: function (error) {
-      console.log("Error" + error);
-      swal("Error!", "Vehicle Saved Failed", "error");
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(xhr);
+        swal("Error!", "Vehicle Save Failed!", "error");
+      }
     },
   });
 }
@@ -44,15 +52,24 @@ export function updateVehicle(vehicleId, vehicleData) {
     contentType: "application/json",
     data: JSON.stringify(vehicleData),
     headers: {
-      Authorization: `Bearer ` + token,
+      Authorization: "Bearer " + token,
     },
 
     success: function () {
       swal("Confirmation!", "Vehicle Update Successfully!", "success");
     },
 
-    error: function (error) {
-      console.log(error);
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(xhr);
+        swal("Error!", "Vehicle Update Failed!", "error");
+      }
     },
   });
 }
@@ -62,8 +79,12 @@ export async function searchVehicle(vehicleId) {
     url: baseUrl + "/" + vehicleId,
     method: "GET",
     dataType: "json",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
 
     error: function (error) {
+      console.log(error);
       swal("Warning!", "Vehicle not found!", "info");
     },
   });
@@ -75,9 +96,25 @@ export function deleteVehicle(vehicleId) {
     method: "DELETE",
     data: "data",
     dataType: "dataType",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
 
-    success: function (response) {
+    success: function () {
       swal("Confirmation!", "Vehicle Delete Successfully!", "success");
+    },
+
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(xhr);
+        swal("Error!", "Vehicle Delete Failed!", "error");
+      }
     },
   });
 }

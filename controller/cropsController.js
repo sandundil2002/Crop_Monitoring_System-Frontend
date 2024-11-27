@@ -1,4 +1,11 @@
-import { getAllCrops, getAllFields, saveCrop, updateCrop, searchCrop, deleteCrop } from "../model/cropsModel.js";
+import {
+  getAllCrops,
+  getAllFields,
+  saveCrop,
+  updateCrop,
+  searchCrop,
+  deleteCrop,
+} from "../model/cropsModel.js";
 
 const cropScientificNames = {
   Rice: "Oryza sativa",
@@ -18,26 +25,26 @@ $(document).ready(function () {
   });
 
   let selectedFields = [];
-  
-  $("#selectedFieldsList").on("click", ".remove-btn", function() {
+
+  $("#selectedFieldsList").on("click", ".remove-btn", function () {
     const $listItem = $(this).closest("li");
     const valueToRemove = $listItem.data("value");
     $listItem.remove();
-    selectedFields = selectedFields.filter(value => value !== valueToRemove);
+    selectedFields = selectedFields.filter((value) => value !== valueToRemove);
     $(`#fieldId option[value="${valueToRemove}"]`).prop("selected", false);
     console.log("Current selected fields:", selectedFields);
   });
 
-  $("#updatedFieldsList").on("click", ".remove-btn", function() {
+  $("#updatedFieldsList").on("click", ".remove-btn", function () {
     const $listItem = $(this).closest("li");
     const valueToRemove = $listItem.data("value");
     $listItem.remove();
-    selectedFields = selectedFields.filter(value => value !== valueToRemove);
+    selectedFields = selectedFields.filter((value) => value !== valueToRemove);
     $(`#editFieldId option[value="${valueToRemove}"]`).prop("selected", false);
     console.log("Current selected fields:", selectedFields);
   });
-  
-  $(".fieldId").change(function() {
+
+  $(".fieldId").change(function () {
     const selectedOption = $(this).find("option:selected");
     const value = selectedOption.val();
     const text = selectedOption.text();
@@ -64,7 +71,7 @@ $(document).ready(function () {
         `);
     }
   });
-  
+
   $("#btnSave").click(() => {
     const commonName = $("#cropCommonName").val();
     const scientificName = $("#cropScientificName").val();
@@ -72,25 +79,27 @@ $(document).ready(function () {
     const season = $("#cropSeason").val();
     const cropImg = $("#cropImg").prop("files")[0];
     console.log("Selected fields:", selectedFields);
-    
+
     const cropData = {
       commonName: commonName,
       scientificName: scientificName,
       category: category,
       season: season,
       cropImg: cropImg,
-      fields: selectedFields, 
+      fields: selectedFields,
     };
 
-    saveCrop(cropData).then(() => {
-      loadCropTable().then(() => {
-        $("#addCropModal").modal("hide");
+    saveCrop(cropData)
+      .then(() => {
+        loadCropTable().then(() => {
+          $("#addCropModal").modal("hide");
+        });
+      })
+      .catch((error) => {
+        console.error("Failed to save crop data:", error);
       });
-    }).catch(error => {
-      console.error("Failed to save crop data:", error);
-    });
   });
-  
+
   $("#btnEdit").click(() => {
     const cropId = $("#editCropId").val();
     const commonName = $("#editCropCommonName").val();
@@ -105,18 +114,20 @@ $(document).ready(function () {
       category: category,
       season: season,
       cropImg: cropImg,
-      fields: selectedFields, 
+      fields: selectedFields,
     };
 
-    updateCrop(cropId, cropData).then(() => {
-      loadCropTable().then(() => {
-        $("#editCropModal").modal("hide");
+    updateCrop(cropId, cropData)
+      .then(() => {
+        loadCropTable().then(() => {
+          $("#editCropModal").modal("hide");
+        });
+      })
+      .catch((error) => {
+        console.error("Failed to update crop data:", error);
       });
-    }).catch(error => {
-      console.error("Failed to update crop data:", error);
-    });
   });
-  
+
   $("#btnSearch").click(async function () {
     try {
       const cropId = $("#dropdownMenuButton").text().trim();
@@ -125,7 +136,11 @@ $(document).ready(function () {
         return;
       }
 
-      $("#btnSearch").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...').prop("disabled", true);
+      $("#btnSearch")
+        .html(
+          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+        )
+        .prop("disabled", true);
       const cropDetails = await searchCrop(cropId);
       let cropArray = [];
       if (cropDetails) {
@@ -148,9 +163,15 @@ $(document).ready(function () {
       });
     } catch (error) {
       console.error("Error retrieving crop details:", error);
-      swal("Error", `Failed to retrieve crop details: ${error.message}`, "error");
+      swal(
+        "Error",
+        `Failed to retrieve crop details: ${error.message}`,
+        "error"
+      );
     } finally {
-      $("#btnSearch").html('<i class="bi bi-search"></i>').prop("disabled", false);
+      $("#btnSearch")
+        .html('<i class="bi bi-search"></i>')
+        .prop("disabled", false);
     }
   });
 
@@ -162,7 +183,7 @@ $(document).ready(function () {
     const fieldType = row.find("td:eq(3)").text();
     const cropCategory = row.find("td:eq(4)").text();
     const cropSeason = row.find("td:eq(5)").text();
-    
+
     $("#editCropId").val(cropId);
     $("#editCropCommonName").val(cropCommonName);
     $("#editCropScientificName").val(cropScientificName);
@@ -175,9 +196,9 @@ $(document).ready(function () {
       $(this).prop("selected", selectedFields.includes(optionValue));
     });
 
-    $("#updatedFieldsList").empty(); 
+    $("#updatedFieldsList").empty();
     selectedFields.forEach((field) => {
-      if (field) { 
+      if (field) {
         $("#updatedFieldsList").append(`
                 <li data-value="${field}">
                     ${field}
@@ -190,33 +211,33 @@ $(document).ready(function () {
     });
     $("#editCropModal").modal("show");
   });
-  
+
   loadCropTable();
 });
 
 $(document).on("click", ".btn-delete-crop", function () {
-    const cropId = $(this).data("crop-id");
+  const cropId = $(this).data("crop-id");
 
-    swal({
-        title: "Are you sure?",
-        text: `Do you want to delete crop with ID: ${cropId}?`,
-        icon: "warning",
-        buttons: {
-            cancel: "Cancel",
-            confirm: {
-                text: "Delete",
-                visible: true,
-                className: "btn-danger",
-            },
-        },
-    }).then((willDelete) => {
-        if (willDelete) {
-            const promise = deleteCrop(cropId);
-            promise.then(() => {
-                loadCropTable();
-            });
-        }
-    });
+  swal({
+    title: "Are you sure?",
+    text: `Do you want to delete crop with ID: ${cropId}?`,
+    icon: "warning",
+    buttons: {
+      cancel: "Cancel",
+      confirm: {
+        text: "Delete",
+        visible: true,
+        className: "btn-danger",
+      },
+    },
+  }).then((willDelete) => {
+    if (willDelete) {
+      const promise = deleteCrop(cropId);
+      promise.then(() => {
+        loadCropTable();
+      });
+    }
+  });
 });
 
 async function loadCropTable() {
@@ -227,8 +248,8 @@ async function loadCropTable() {
 
     cropList.forEach((crop) => {
       const imageSrc = crop.cropImg
-          ? `data:image/jpeg;base64,${crop.cropImg}`
-          : "./assets/images/default-crop.png";
+        ? `data:image/jpeg;base64,${crop.cropImg}`
+        : "./assets/images/default-crop.png";
 
       cropTable.append(`
         <tr>
@@ -240,10 +261,14 @@ async function loadCropTable() {
           <td>${crop.season}</td>
           <td><img src="${imageSrc}" alt="Crop Image" width="50" height="50"></td>
           <td>
-            <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${crop.cropId}" data-bs-toggle="modal" data-bs-target="#editCropModal">
+            <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${
+              crop.cropId
+            }" data-bs-toggle="modal" data-bs-target="#editCropModal">
               <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${crop.cropId}">
+            <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${
+              crop.cropId
+            }">
               <i class="bi bi-trash"></i>
             </button>
           </td>
@@ -265,22 +290,22 @@ async function loadCropIds() {
     cropIdDropdown.empty();
 
     cropList.forEach((crop) => {
-        const cropId = crop.cropId;
-        const listItem = `
+      const cropId = crop.cropId;
+      const listItem = `
             <li>
             <a class="dropdown-item" href="#" data-value="${cropId}">
                 ${cropId}
             </a>
             </li>
         `;
-        cropIdDropdown.append(listItem);
+      cropIdDropdown.append(listItem);
     });
 
     $("#cropList").on("click", ".dropdown-item", function (event) {
-        event.preventDefault();
-        const selectedId = $(this).data("value");
-        $("#dropdownMenuButton").text(selectedId);
-        $("#dropdownMenuButton").data("selected-id", selectedId);
+      event.preventDefault();
+      const selectedId = $(this).data("value");
+      $("#dropdownMenuButton").text(selectedId);
+      $("#dropdownMenuButton").data("selected-id", selectedId);
     });
   } catch (error) {
     console.error("Error loading crop IDs:", error);
@@ -302,10 +327,14 @@ function createCropTableRow(crop) {
       <td>${crop.season}</td>
       <td><img src="${imageSrc}" alt="Crop Image" width="50" height="50"></td>
       <td>
-        <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${crop.cropId}" data-bs-toggle="modal" data-bs-target="#editCropModal">
+        <button class="btn btn-outline-primary btn-sm mb-1 btn-edit-crop mx-1" data-crop-id="${
+          crop.cropId
+        }" data-bs-toggle="modal" data-bs-target="#editCropModal">
           <i class="bi bi-pencil"></i>
         </button>
-        <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${crop.cropId}">
+        <button class="btn btn-outline-danger btn-sm mb-1 btn-delete-crop" data-crop-id="${
+          crop.cropId
+        }">
           <i class="bi bi-trash"></i>
         </button>
       </td>
@@ -315,13 +344,15 @@ function createCropTableRow(crop) {
 
 async function loadFieldIds() {
   const fieldList = await getAllFields();
-    const fieldIdDropdown = $(".fieldId");
-    fieldIdDropdown.empty();
-    fieldIdDropdown.append(`<option value="" disabled selected>Select Field Ids</option>`);
+  const fieldIdDropdown = $(".fieldId");
+  fieldIdDropdown.empty();
+  fieldIdDropdown.append(
+    `<option value="" disabled selected>Select Field Ids</option>`
+  );
 
-    fieldList.forEach((field) => {
-      fieldIdDropdown.append(`
+  fieldList.forEach((field) => {
+    fieldIdDropdown.append(`
         <option value="${field.fieldId}">${field.fieldId}</option>
       `);
-    });
+  });
 }

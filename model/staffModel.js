@@ -11,11 +11,10 @@ export function getAllStaff() {
     },
 
     error: function (error) {
-      console.log("Error: " + error);
+      console.log(error);
     },
   });
 }
-
 
 export function getAllVehicles() {
   return $.ajax({
@@ -27,7 +26,7 @@ export function getAllVehicles() {
     },
 
     error: function (error) {
-      console.log("Error: " + error);
+      console.log(error);
     },
   });
 }
@@ -46,9 +45,17 @@ export function saveStaff(staff) {
       swal("Confirmation!", "Staff Member Saved Successfully!", "success");
     },
 
-    error: function (error) {
-      console.log("Error" + error);
-      swal("Error!", "Staff Saved Failed", "error");
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(xhr);
+        swal("Error!", "Staff Saved Failed", "error");
+      }
     },
   });
 }
@@ -67,8 +74,17 @@ export function updateStaff(staffId, staffData) {
       swal("Confirmation!", "Staff Member Update Successfully!", "success");
     },
 
-    error: function (error) {
-      console.log(error);
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(error);
+        swal("Error!", "Staff Update Failed", "error");
+      }
     },
   });
 }
@@ -78,8 +94,12 @@ export async function searchStaff(staffId) {
     url: baseUrl + "/" + staffId,
     method: "GET",
     dataType: "json",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
 
     error: function (error) {
+      console.log(error);
       swal("Warning!", "Member not found!", "info");
     },
   });
@@ -91,17 +111,33 @@ export function deleteStaff(staffId) {
     method: "DELETE",
     data: "data",
     dataType: "dataType",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
 
-    success: function (response) {
+    success: function () {
       swal("Confirmation!", "Member Delete Successfully!", "success");
+    },
+
+    error: function (xhr) {
+      if (xhr.status === 403) {
+        swal(
+          "Access Denied!",
+          "You are not authorized to perform this action!",
+          "warning"
+        );
+      } else {
+        console.log(xhr);
+        swal("Error!", "Staff Delete Failed", "error");
+      }
     },
   });
 }
 
 export function validateUserData(user) {
-  const namePattern = /^[A-Za-z\s]+$/; 
-  const addressPattern = /^[A-Za-z0-9\s,.'-]+$/; 
-  const mobilePattern = /^\d{10}$/; 
+  const namePattern = /^[A-Za-z\s]+$/;
+  const addressPattern = /^[A-Za-z0-9\s,.'-]+$/;
+  const mobilePattern = /^\d{10}$/;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!namePattern.test(user.firstName)) {
