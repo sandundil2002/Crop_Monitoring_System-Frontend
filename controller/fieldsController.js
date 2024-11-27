@@ -1,4 +1,5 @@
 import {
+  checkTokenValidity,
   gelAllFields,
   getAllStaff,
   saveField,
@@ -56,106 +57,107 @@ $(".staffId").change(function () {
 });
 
 $(document).ready(function () {
-  $(".dropdown-item").click(function () {
-    var selectedValue = $(this).data("value");
-    $("#dropdownMenuButton").text(selectedValue);
-  });
+  if (checkTokenValidity()) {
+    $(".dropdown-item").click(function () {
+      var selectedValue = $(this).data("value");
+      $("#dropdownMenuButton").text(selectedValue);
+    });
 
-  $("#btnSave").click(() => {
-    const fieldName = $("#fieldName").val();
-    const fieldLocation = $("#fieldLocation").val();
-    const fieldSize = $("#fieldSize").val();
-    const fieldStaff = selectedFields;
-    const fieldImg1 = $("#fieldImg1").prop("files")[0];
-    const fieldImg2 = $("#fieldImg2").prop("files")[0];
+    $("#btnSave").click(() => {
+      const fieldName = $("#fieldName").val();
+      const fieldLocation = $("#fieldLocation").val();
+      const fieldSize = $("#fieldSize").val();
+      const fieldStaff = selectedFields;
+      const fieldImg1 = $("#fieldImg1").prop("files")[0];
+      const fieldImg2 = $("#fieldImg2").prop("files")[0];
 
-    const fieldData = {
-      fieldName: fieldName,
-      location: fieldLocation,
-      size: fieldSize,
-      staffs: fieldStaff,
-      fieldImg1: fieldImg1,
-      fieldImg2: fieldImg2,
-    };
+      const fieldData = {
+        fieldName: fieldName,
+        location: fieldLocation,
+        size: fieldSize,
+        staffs: fieldStaff,
+        fieldImg1: fieldImg1,
+        fieldImg2: fieldImg2,
+      };
 
-    saveField(fieldData)
-      .then(() => {
-        loadFieldTable().then(() => {
-          $("addCropModal").modal("hide");
+      saveField(fieldData)
+        .then(() => {
+          loadFieldTable().then(() => {
+            $("addCropModal").modal("hide");
+          });
+        })
+        .catch((error) => {
+          console.log("Error:", error);
         });
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-  });
+    });
 
-  $("#btnEdit").click(() => {
-    const fieldId = $("#editFieldId").val();
-    const fieldName = $("#editFieldName").val();
-    const fieldLocation = $("#editFieldLocation").val();
-    const fieldSize = $("#editFieldSize").val();
-    const fieldStaff = selectedFields;
-    const fieldImg1 = $("#editFieldImg1").prop("files")[0];
-    const fieldImg2 = $("#editFieldImg2").prop("files")[0];
+    $("#btnEdit").click(() => {
+      const fieldId = $("#editFieldId").val();
+      const fieldName = $("#editFieldName").val();
+      const fieldLocation = $("#editFieldLocation").val();
+      const fieldSize = $("#editFieldSize").val();
+      const fieldStaff = selectedFields;
+      const fieldImg1 = $("#editFieldImg1").prop("files")[0];
+      const fieldImg2 = $("#editFieldImg2").prop("files")[0];
 
-    const fieldData = {
-      fieldName: fieldName,
-      location: fieldLocation,
-      size: fieldSize,
-      staffs: fieldStaff,
-      fieldImg1: fieldImg1,
-      fieldImg2: fieldImg2,
-    };
+      const fieldData = {
+        fieldName: fieldName,
+        location: fieldLocation,
+        size: fieldSize,
+        staffs: fieldStaff,
+        fieldImg1: fieldImg1,
+        fieldImg2: fieldImg2,
+      };
 
-    updateField(fieldId, fieldData)
-      .then(() => {
-        loadFieldTable().then(() => {
-          $("#editFieldModal").modal("hide");
+      updateField(fieldId, fieldData)
+        .then(() => {
+          loadFieldTable().then(() => {
+            $("#editFieldModal").modal("hide");
+          });
+        })
+        .catch((error) => {
+          console.log("Error:", error);
         });
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-  });
+    });
 
-  $("#btnSearch").click(async function () {
-    try {
-      const fieldId = $("#dropdownMenuButton").text().trim();
-      if (!fieldId) {
-        swal("Warning!", "Please select a field id", "info");
-        return;
-      }
-
-      $("#btnSearch").html(
-        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`
-      );
-      const fieldDetails = await searchField(fieldId);
-      let fieldArray = [];
-      if (fieldDetails) {
-        if (Array.isArray(fieldDetails)) {
-          fieldArray = fieldDetails;
-        } else if (typeof fieldDetails === "object") {
-          fieldArray = [fieldDetails];
+    $("#btnSearch").click(async function () {
+      try {
+        const fieldId = $("#dropdownMenuButton").text().trim();
+        if (!fieldId) {
+          swal("Warning!", "Please select a field id", "info");
+          return;
         }
-      }
 
-      $("#fieldTable").empty();
-      if (fieldArray.length === 0) {
-        swal("Warning!", "No field found with the given id", "info");
-        return;
-      }
+        $("#btnSearch").html(
+          `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...`
+        );
+        const fieldDetails = await searchField(fieldId);
+        let fieldArray = [];
+        if (fieldDetails) {
+          if (Array.isArray(fieldDetails)) {
+            fieldArray = fieldDetails;
+          } else if (typeof fieldDetails === "object") {
+            fieldArray = [fieldDetails];
+          }
+        }
 
-      fieldArray.forEach((field) => {
-        const image1Src = field.fieldImg1
-          ? `data:image/png;base64,${field.fieldImg1}`
-          : "images/placeholder.png";
-        const image2Src = field.fieldImg2
-          ? `data:image/png;base64,${field.fieldImg2}`
-          : "images/placeholder.png";
-        const location = field.location
-          ? `${field.location.x}, ${field.location.y}`
-          : "N/A";
-        $("#fieldTable").append(`
+        $("#fieldTable").empty();
+        if (fieldArray.length === 0) {
+          swal("Warning!", "No field found with the given id", "info");
+          return;
+        }
+
+        fieldArray.forEach((field) => {
+          const image1Src = field.fieldImg1
+            ? `data:image/png;base64,${field.fieldImg1}`
+            : "images/placeholder.png";
+          const image2Src = field.fieldImg2
+            ? `data:image/png;base64,${field.fieldImg2}`
+            : "images/placeholder.png";
+          const location = field.location
+            ? `${field.location.x}, ${field.location.y}`
+            : "N/A";
+          $("#fieldTable").append(`
             <tr>
               <td>${field.fieldId}</td>
               <td>${field.fieldName}</td>
@@ -174,16 +176,17 @@ $(document).ready(function () {
               </td>
             </tr>
           `);
-      });
-    } catch (error) {
-      console.log("Error:", error);
-    } finally {
-      $("#btnSearch")
-        .html('<i class="bi bi-search"></i>')
-        .prop("disabled", false);
-    }
-  });
-  loadFieldTable();
+        });
+      } catch (error) {
+        console.log("Error:", error);
+      } finally {
+        $("#btnSearch")
+          .html('<i class="bi bi-search"></i>')
+          .prop("disabled", false);
+      }
+    });
+    loadFieldTable();
+  }
 });
 
 $(document).on("click", ".btn-edit-field", function () {

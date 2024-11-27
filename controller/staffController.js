@@ -1,4 +1,5 @@
 import {
+  checkTokenValidity,
   getAllStaff,
   getAllVehicles,
   saveStaff,
@@ -9,167 +10,169 @@ import {
 } from "../model/staffModel.js";
 
 $(document).ready(function () {
-  $("#btnSave").click(() => {
-    const firstName = $("#staffFirstName").val();
-    const lastName = $("#staffLastName").val();
-    const designation = $("#designation").val();
-    const gender = $("#gender").val();
-    const dob = $("#dob").val();
-    const addressL1 = $("#addressL1").val();
-    const addressL2 = $("#addressL2").val();
-    const addressL3 = $("#addressL3").val();
-    const addressL4 = $("#addressL4").val();
-    const addressL5 = $("#addressL5").val();
-    const mobile = $("#mobile").val();
-    const email = $("#email").val();
-    const role = $("#role").val();
-    const vehicleId = $("#vehicleId").val();
+  if (checkTokenValidity()) {
+    $("#btnSave").click(() => {
+      const firstName = $("#staffFirstName").val();
+      const lastName = $("#staffLastName").val();
+      const designation = $("#designation").val();
+      const gender = $("#gender").val();
+      const dob = $("#dob").val();
+      const addressL1 = $("#addressL1").val();
+      const addressL2 = $("#addressL2").val();
+      const addressL3 = $("#addressL3").val();
+      const addressL4 = $("#addressL4").val();
+      const addressL5 = $("#addressL5").val();
+      const mobile = $("#mobile").val();
+      const email = $("#email").val();
+      const role = $("#role").val();
+      const vehicleId = $("#vehicleId").val();
 
-    const userData = {
-      firstName: firstName,
-      lastName: lastName,
-      designation: designation,
-      gender: gender,
-      dateOfBirth: dob,
-      addressLine1: addressL1,
-      addressLine2: addressL2,
-      addressLine3: addressL3,
-      addressLine4: addressL4,
-      addressLine5: addressL5,
-      mobile: mobile,
-      email: email,
-      role: role,
-      vehicleId: vehicleId,
-    };
+      const userData = {
+        firstName: firstName,
+        lastName: lastName,
+        designation: designation,
+        gender: gender,
+        dateOfBirth: dob,
+        addressLine1: addressL1,
+        addressLine2: addressL2,
+        addressLine3: addressL3,
+        addressLine4: addressL4,
+        addressLine5: addressL5,
+        mobile: mobile,
+        email: email,
+        role: role,
+        vehicleId: vehicleId,
+      };
 
-    if (validateUserData(userData)) {
-      const promise = saveStaff(userData);
-      promise.then(() => {
-        loadStaffTable();
-      });
-    }
-  });
-
-  $("#btnEdit").click(function () {
-    const staffId = $("#editStaffId").val();
-    const firstName = $("#editStaffFirstName").val();
-    const lastName = $("#editStaffLastName").val();
-    const designation = $("#editDesignation").val();
-    const gender = $("#editGender").val();
-    const dob = $("#editDob").val();
-    const addressL1 = $("#editAddressL1").val();
-    const addressL2 = $("#editAddressL2").val();
-    const addressL3 = $("#editAddressL3").val();
-    const addressL4 = $("#editAddressL4").val();
-    const addressL5 = $("#editAddressL5").val();
-    const mobile = $("#editMobile").val();
-    const email = $("#editEmail").val();
-    const role = $("#editRole").val();
-    const vehicleId = $("#editVehicleId").val();
-
-    const staffData = {
-      firstName: firstName,
-      lastName: lastName,
-      designation: designation,
-      gender: gender,
-      dateOfBirth: dob,
-      addressLine1: addressL1,
-      addressLine2: addressL2,
-      addressLine3: addressL3,
-      addressLine4: addressL4,
-      addressLine5: addressL5,
-      mobile: mobile,
-      email: email,
-      role: role,
-      vehicleId: vehicleId,
-    };
-
-    swal({
-      title: "Are you sure?",
-      text: "Do you want to update this member!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willUpdate) => {
-      if (willUpdate) {
-        if (validateUserData(staffData)) {
-          const promise = updateStaff(staffId, staffData);
-          promise.then(() => {
-            loadStaffTable();
-          });
-        }
+      if (validateUserData(userData)) {
+        const promise = saveStaff(userData);
+        promise.then(() => {
+          loadStaffTable();
+        });
       }
     });
-  });
 
-  $("#btnSearch").click(async function () {
-    try {
-      const staffId = $("#dropdownMenuButton").text().trim();
+    $("#btnEdit").click(function () {
+      const staffId = $("#editStaffId").val();
+      const firstName = $("#editStaffFirstName").val();
+      const lastName = $("#editStaffLastName").val();
+      const designation = $("#editDesignation").val();
+      const gender = $("#editGender").val();
+      const dob = $("#editDob").val();
+      const addressL1 = $("#editAddressL1").val();
+      const addressL2 = $("#editAddressL2").val();
+      const addressL3 = $("#editAddressL3").val();
+      const addressL4 = $("#editAddressL4").val();
+      const addressL5 = $("#editAddressL5").val();
+      const mobile = $("#editMobile").val();
+      const email = $("#editEmail").val();
+      const role = $("#editRole").val();
+      const vehicleId = $("#editVehicleId").val();
 
-      if (!staffId || staffId === "Search Staff By Id") {
-        swal("Warning!", "Please select a valid staff ID", "warning");
-        return;
-      }
+      const staffData = {
+        firstName: firstName,
+        lastName: lastName,
+        designation: designation,
+        gender: gender,
+        dateOfBirth: dob,
+        addressLine1: addressL1,
+        addressLine2: addressL2,
+        addressLine3: addressL3,
+        addressLine4: addressL4,
+        addressLine5: addressL5,
+        mobile: mobile,
+        email: email,
+        role: role,
+        vehicleId: vehicleId,
+      };
 
-      $("#btnSearch")
-        .html(
-          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
-        )
-        .prop("disabled", true);
-
-      const staffDetails = await searchStaff(staffId);
-
-      let staffArray = [];
-      if (staffDetails) {
-        if (Array.isArray(staffDetails)) {
-          staffArray = staffDetails;
-        } else if (typeof staffDetails === "object") {
-          staffArray = [staffDetails];
+      swal({
+        title: "Are you sure?",
+        text: "Do you want to update this member!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willUpdate) => {
+        if (willUpdate) {
+          if (validateUserData(staffData)) {
+            const promise = updateStaff(staffId, staffData);
+            promise.then(() => {
+              loadStaffTable();
+            });
+          }
         }
-      }
-
-      $("#staffTable").empty();
-
-      if (staffArray.length === 0) {
-        swal("Information", "No staff details found", "info");
-        return;
-      }
-
-      staffArray.forEach(function (staff) {
-        const row = createStaffTableRow(staff);
-        $(".table tbody").append(row);
       });
-    } catch (error) {
-      console.error("Comprehensive error details:", {
-        message: error.message,
-        name: error.name,
-        stack: error.stack,
-      });
-      swal(
-        "Error",
-        `Failed to retrieve staff details: ${error.message}`,
-        "error"
-      );
-    } finally {
-      $("#btnSearch")
-        .html('<i class="bi bi-search"></i>')
-        .prop("disabled", false);
-    }
-  });
+    });
 
-  $("#editSelectedFieldsList").on("click", ".remove-btn", function () {
-    const valueToRemove = $(this).data("value");
-    $(this).parent().remove();
-    $("#editField option")
-      .filter(function () {
-        return $(this).val() === valueToRemove;
-      })
-      .prop("selected", false);
-  });
+    $("#btnSearch").click(async function () {
+      try {
+        const staffId = $("#dropdownMenuButton").text().trim();
 
-  loadStaffTable();
-  loadVehicleIds();
-  loadStaffIds();
+        if (!staffId || staffId === "Search Staff By Id") {
+          swal("Warning!", "Please select a valid staff ID", "warning");
+          return;
+        }
+
+        $("#btnSearch")
+          .html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+          )
+          .prop("disabled", true);
+
+        const staffDetails = await searchStaff(staffId);
+
+        let staffArray = [];
+        if (staffDetails) {
+          if (Array.isArray(staffDetails)) {
+            staffArray = staffDetails;
+          } else if (typeof staffDetails === "object") {
+            staffArray = [staffDetails];
+          }
+        }
+
+        $("#staffTable").empty();
+
+        if (staffArray.length === 0) {
+          swal("Information", "No staff details found", "info");
+          return;
+        }
+
+        staffArray.forEach(function (staff) {
+          const row = createStaffTableRow(staff);
+          $(".table tbody").append(row);
+        });
+      } catch (error) {
+        console.error("Comprehensive error details:", {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        });
+        swal(
+          "Error",
+          `Failed to retrieve staff details: ${error.message}`,
+          "error"
+        );
+      } finally {
+        $("#btnSearch")
+          .html('<i class="bi bi-search"></i>')
+          .prop("disabled", false);
+      }
+    });
+
+    $("#editSelectedFieldsList").on("click", ".remove-btn", function () {
+      const valueToRemove = $(this).data("value");
+      $(this).parent().remove();
+      $("#editField option")
+        .filter(function () {
+          return $(this).val() === valueToRemove;
+        })
+        .prop("selected", false);
+    });
+
+    loadStaffTable();
+    loadVehicleIds();
+    loadStaffIds();
+  }
 });
 
 $(document).on("click", ".btn-edit-staff", function () {

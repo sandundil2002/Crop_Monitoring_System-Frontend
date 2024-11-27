@@ -1,4 +1,5 @@
 import {
+  checkTokenValidity,
   getAllEquipments,
   getAllFields,
   getAllStaff,
@@ -9,120 +10,122 @@ import {
 } from "../model/equipmentModel.js";
 
 $(document).ready(function () {
-  $("#btnSave").on("click", function () {
-    const category = $("#category").val();
-    const type = $("#type").val();
-    const staff = $("#assignStaff").val();
-    const field = $("#assignField").val();
-    const status = $("#status").val();
+  if (checkTokenValidity()) {
+    $("#btnSave").on("click", function () {
+      const category = $("#category").val();
+      const type = $("#type").val();
+      const staff = $("#assignStaff").val();
+      const field = $("#assignField").val();
+      const status = $("#status").val();
 
-    const equipmentData = {
-      category: category,
-      type: type,
-      eqStaff: staff,
-      eqField: field,
-      status: status,
-    };
+      const equipmentData = {
+        category: category,
+        type: type,
+        eqStaff: staff,
+        eqField: field,
+        status: status,
+      };
 
-    const promise = saveEquipment(equipmentData);
-    promise.then(() => {
-      loadEquipmentTable().then((r) => {
-        $("#addEquipmentModal").modal("hide");
-      });
-    });
-  });
-
-  $("#btnEdit").on("click", function () {
-    const equipmentId = $("#editEquipmentId").val();
-    const category = $("#editCategory").val();
-    const type = $("#editType").val();
-    const staff = $("#editAssignStaff").val();
-    const field = $("#editAssignField").val();
-    const status = $("#editStatus").val();
-
-    const equipmentData = {
-      equipmentId: equipmentId,
-      category: category,
-      type: type,
-      eqStaff: staff,
-      eqField: field,
-      status: status,
-    };
-
-    swal({
-      title: "Are you sure?",
-      text: "Do you want to update this equipment!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willUpdate) => {
-      if (willUpdate) {
-        const promise = updateEquipment(equipmentId, equipmentData);
-        promise.then(() => {
-          loadEquipmentTable().then((r) => {
-            $("#editEquipmentModal").modal("hide");
-          });
+      const promise = saveEquipment(equipmentData);
+      promise.then(() => {
+        loadEquipmentTable().then((r) => {
+          $("#addEquipmentModal").modal("hide");
         });
+      });
+    });
+
+    $("#btnEdit").on("click", function () {
+      const equipmentId = $("#editEquipmentId").val();
+      const category = $("#editCategory").val();
+      const type = $("#editType").val();
+      const staff = $("#editAssignStaff").val();
+      const field = $("#editAssignField").val();
+      const status = $("#editStatus").val();
+
+      const equipmentData = {
+        equipmentId: equipmentId,
+        category: category,
+        type: type,
+        eqStaff: staff,
+        eqField: field,
+        status: status,
+      };
+
+      swal({
+        title: "Are you sure?",
+        text: "Do you want to update this equipment!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willUpdate) => {
+        if (willUpdate) {
+          const promise = updateEquipment(equipmentId, equipmentData);
+          promise.then(() => {
+            loadEquipmentTable().then((r) => {
+              $("#editEquipmentModal").modal("hide");
+            });
+          });
+        }
+      });
+    });
+
+    $("#btnSearch").click(async function () {
+      try {
+        const equipmentId = $("#dropdownMenuButton").text().trim();
+
+        if (!equipmentId || equipmentId === "Search Equipment by Id") {
+          swal("Warning!", "Please enter Equipment ID!", "info");
+          return;
+        }
+
+        $("#btnSearch")
+          .html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+          )
+          .prop("disabled", true);
+
+        const equipmentList = await searchEquipment(equipmentId);
+
+        let equipmentArray = [];
+        if (equipmentList) {
+          if (Array.isArray(equipmentList)) {
+            equipmentArray = equipmentList;
+          } else if (typeof equipmentList === "object") {
+            equipmentArray = [equipmentList];
+          }
+        }
+
+        $("#equipmentTable").empty();
+
+        if (equipmentArray.length === 0) {
+          swal("Warning!", "Equipment not found!", "info");
+          return;
+        }
+
+        equipmentArray.forEach((equipment) => {
+          const row = createEquipmentTableRow(equipment);
+          $(".table tbody").append(row);
+        });
+      } catch (error) {
+        console.error("Comprehensive error details:", {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        });
+        swal(
+          "Error",
+          `Failed to retrieve equipment details: ${error.message}`,
+          "error"
+        );
+      } finally {
+        $("#btnSearch")
+          .html('<i class="bi bi-search"></i>')
+          .prop("disabled", false);
       }
     });
-  });
 
-  $("#btnSearch").click(async function () {
-    try {
-      const equipmentId = $("#dropdownMenuButton").text().trim();
-
-      if (!equipmentId || equipmentId === "Search Equipment by Id") {
-        swal("Warning!", "Please enter Equipment ID!", "info");
-        return;
-      }
-
-      $("#btnSearch")
-        .html(
-          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
-        )
-        .prop("disabled", true);
-
-      const equipmentList = await searchEquipment(equipmentId);
-
-      let equipmentArray = [];
-      if (equipmentList) {
-        if (Array.isArray(equipmentList)) {
-          equipmentArray = equipmentList;
-        } else if (typeof equipmentList === "object") {
-          equipmentArray = [equipmentList];
-        }
-      }
-
-      $("#equipmentTable").empty();
-
-      if (equipmentArray.length === 0) {
-        swal("Warning!", "Equipment not found!", "info");
-        return;
-      }
-
-      equipmentArray.forEach((equipment) => {
-        const row = createEquipmentTableRow(equipment);
-        $(".table tbody").append(row);
-      });
-    } catch (error) {
-      console.error("Comprehensive error details:", {
-        message: error.message,
-        name: error.name,
-        stack: error.stack,
-      });
-      swal(
-        "Error",
-        `Failed to retrieve equipment details: ${error.message}`,
-        "error"
-      );
-    } finally {
-      $("#btnSearch")
-        .html('<i class="bi bi-search"></i>')
-        .prop("disabled", false);
-    }
-  });
-
-  loadEquipmentTable();
+    loadEquipmentTable();
+  }
 });
 
 $(document).on("click", ".btn-delete-equipment", function () {

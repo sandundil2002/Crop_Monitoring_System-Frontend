@@ -1,12 +1,16 @@
-$(document).ready(function () {
-  const token = localStorage.getItem("authToken");
-  console.log(token);
+import { checkTokenValidity } from "../model/dashboardModel.js";
 
-  $(".dash-btn a").on("click", function (event) {
-    event.preventDefault();
-    const page = $(this).attr("href");
-    $("#mainContentFrame").attr("src", page);
-  });
+$(document).ready(function () {
+  if (checkTokenValidity()) {
+    const token = localStorage.getItem("authToken");
+    console.log(token);
+
+    $(".dash-btn a").on("click", function (event) {
+      event.preventDefault();
+      const page = $(this).attr("href");
+      $("#mainContentFrame").attr("src", page);
+    });
+  }
 });
 
 $(".btn-signout").click(function () {

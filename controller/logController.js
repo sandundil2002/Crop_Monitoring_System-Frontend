@@ -1,4 +1,5 @@
 import {
+  checkTokenValidity,
   getAllLogs,
   getAllFields,
   getAllCrops,
@@ -9,39 +10,41 @@ import {
 } from "../model/logModel.js";
 
 $(document).ready(function () {
-  $("#btnSave").click(() => {
-    const logData = {
-      fieldId: $("#fieldId").val(),
-      cropId: $("#cropId").val(),
-      temperature: $("#temperature").val(),
-      details: $("#observations").val(),
-      observedImg: $("#observedImg").prop("files")[0],
-    };
+  if (checkTokenValidity()) {
+    $("#btnSave").click(() => {
+      const logData = {
+        fieldId: $("#fieldId").val(),
+        cropId: $("#cropId").val(),
+        temperature: $("#temperature").val(),
+        details: $("#observations").val(),
+        observedImg: $("#observedImg").prop("files")[0],
+      };
 
-    saveLog(logData).then(() => {
-      loadLogTable().then(() => {
-        $("#addLogModal").modal("hide");
+      saveLog(logData).then(() => {
+        loadLogTable().then(() => {
+          $("#addLogModal").modal("hide");
+        });
       });
     });
-  });
 
-  $("#btnUpdate").click(() => {
-    const logId = $("#editLogId").val();
-    const logData = {
-      fieldId: $("#editFieldId").val(),
-      cropId: $("#editCropId").val(),
-      temperature: $("#editTemperature").val(),
-      details: $("#editObservations").val(),
-      observedImg: $("#editObservedImg").prop("files")[0],
-    };
+    $("#btnUpdate").click(() => {
+      const logId = $("#editLogId").val();
+      const logData = {
+        fieldId: $("#editFieldId").val(),
+        cropId: $("#editCropId").val(),
+        temperature: $("#editTemperature").val(),
+        details: $("#editObservations").val(),
+        observedImg: $("#editObservedImg").prop("files")[0],
+      };
 
-    updateLog(logId, logData).then(() => {
-      loadLogTable().then(() => {
-        $("#editLogModal").modal("hide");
+      updateLog(logId, logData).then(() => {
+        loadLogTable().then(() => {
+          $("#editLogModal").modal("hide");
+        });
       });
     });
-  });
-  loadLogTable();
+    loadLogTable();
+  }
 });
 
 $(document).on("click", ".btn-edit-log", function () {

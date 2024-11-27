@@ -1,4 +1,5 @@
 import {
+  checkTokenValidity,
   getAllVehicles,
   validateVehicle,
   saveVehicle,
@@ -8,123 +9,125 @@ import {
 } from "../model/vehicleModel.js";
 
 $(document).ready(function () {
-  $("#btnSave").click(() => {
-    const category = $("#category").val();
-    const numberPlate = $("#licensePlate").val();
-    const fuelType = $("#fuelType").val();
-    const status = $("#status").val();
-    const remarks = $("#remarks").val();
+  if (checkTokenValidity()) {
+    $("#btnSave").click(() => {
+      const category = $("#category").val();
+      const numberPlate = $("#licensePlate").val();
+      const fuelType = $("#fuelType").val();
+      const status = $("#status").val();
+      const remarks = $("#remarks").val();
 
-    const vehicleData = {
-      category: category,
-      numberPlate: numberPlate,
-      fuelType: fuelType,
-      status: status,
-      remarks: remarks,
-    };
+      const vehicleData = {
+        category: category,
+        numberPlate: numberPlate,
+        fuelType: fuelType,
+        status: status,
+        remarks: remarks,
+      };
 
-    if (validateVehicle(vehicleData)) {
-      const promise = saveVehicle(vehicleData);
-      promise.then(() => {
-        loadVehicleTable().then((r) => {
-          $("#addVehicleModal").modal("hide");
-        });
-      });
-    }
-  });
-
-  $("#btnEdit").click(function () {
-    const vehicleId = $("#editVehicleId").val();
-    const category = $("#editCategory").val();
-    const numberPlate = $("#editLicensePlate").val();
-    const fuelType = $("#editFuelType").val();
-    const status = $("#editStatus").val();
-    const remarks = $("#editRemarks").val();
-
-    const vehicleData = {
-      category: category,
-      numberPlate: numberPlate,
-      fuelType: fuelType,
-      status: status,
-      remarks: remarks,
-    };
-
-    swal({
-      title: "Are you sure?",
-      text: "Do you want to update this vehicle!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willUpdate) => {
-      if (willUpdate) {
-        if (validateVehicle(vehicleData)) {
-          const promise = updateVehicle(vehicleId, vehicleData);
-          promise.then(() => {
-            loadVehicleTable().then((r) => {
-              $("#editVehicleModal").modal("hide");
-            });
+      if (validateVehicle(vehicleData)) {
+        const promise = saveVehicle(vehicleData);
+        promise.then(() => {
+          loadVehicleTable().then((r) => {
+            $("#addVehicleModal").modal("hide");
           });
-        }
+        });
       }
     });
-  });
 
-  $("#btnSearch").click(async function () {
-    try {
-      const vehicleId = $("#dropdownMenuButton").text().trim();
+    $("#btnEdit").click(function () {
+      const vehicleId = $("#editVehicleId").val();
+      const category = $("#editCategory").val();
+      const numberPlate = $("#editLicensePlate").val();
+      const fuelType = $("#editFuelType").val();
+      const status = $("#editStatus").val();
+      const remarks = $("#editRemarks").val();
 
-      if (!vehicleId || vehicleId === "Search Vehicle By Id") {
-        swal("Warning!", "Please select a valid vehicle ID", "info");
-        return;
-      }
+      const vehicleData = {
+        category: category,
+        numberPlate: numberPlate,
+        fuelType: fuelType,
+        status: status,
+        remarks: remarks,
+      };
 
-      $("#btnSearch")
-        .html(
-          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
-        )
-        .prop("disabled", true);
-
-      const vehicleDetails = await searchVehicle(vehicleId);
-
-      let vehicleArray = [];
-      if (vehicleDetails) {
-        if (Array.isArray(vehicleDetails)) {
-          vehicleArray = vehicleDetails;
-        } else if (typeof vehicleDetails === "object") {
-          vehicleArray = [vehicleDetails];
+      swal({
+        title: "Are you sure?",
+        text: "Do you want to update this vehicle!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willUpdate) => {
+        if (willUpdate) {
+          if (validateVehicle(vehicleData)) {
+            const promise = updateVehicle(vehicleId, vehicleData);
+            promise.then(() => {
+              loadVehicleTable().then((r) => {
+                $("#editVehicleModal").modal("hide");
+              });
+            });
+          }
         }
-      }
-
-      $("#vehicleTable").empty();
-
-      if (vehicleArray.length === 0) {
-        swal("Information", "No vehicle details found", "info");
-        return;
-      }
-
-      vehicleArray.forEach(function (vehicle) {
-        const row = createVehicleTableRow(vehicle);
-        $(".table tbody").append(row);
       });
-    } catch (error) {
-      console.error("Comprehensive error details:", {
-        message: error.message,
-        name: error.name,
-        stack: error.stack,
-      });
-      swal(
-        "Error",
-        `Failed to retrieve vehicle details: ${error.message}`,
-        "error"
-      );
-    } finally {
-      $("#btnSearch")
-        .html('<i class="bi bi-search"></i>')
-        .prop("disabled", false);
-    }
-  });
+    });
 
-  loadVehicleTable();
+    $("#btnSearch").click(async function () {
+      try {
+        const vehicleId = $("#dropdownMenuButton").text().trim();
+
+        if (!vehicleId || vehicleId === "Search Vehicle By Id") {
+          swal("Warning!", "Please select a valid vehicle ID", "info");
+          return;
+        }
+
+        $("#btnSearch")
+          .html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Searching...'
+          )
+          .prop("disabled", true);
+
+        const vehicleDetails = await searchVehicle(vehicleId);
+
+        let vehicleArray = [];
+        if (vehicleDetails) {
+          if (Array.isArray(vehicleDetails)) {
+            vehicleArray = vehicleDetails;
+          } else if (typeof vehicleDetails === "object") {
+            vehicleArray = [vehicleDetails];
+          }
+        }
+
+        $("#vehicleTable").empty();
+
+        if (vehicleArray.length === 0) {
+          swal("Information", "No vehicle details found", "info");
+          return;
+        }
+
+        vehicleArray.forEach(function (vehicle) {
+          const row = createVehicleTableRow(vehicle);
+          $(".table tbody").append(row);
+        });
+      } catch (error) {
+        console.error("Comprehensive error details:", {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        });
+        swal(
+          "Error",
+          `Failed to retrieve vehicle details: ${error.message}`,
+          "error"
+        );
+      } finally {
+        $("#btnSearch")
+          .html('<i class="bi bi-search"></i>')
+          .prop("disabled", false);
+      }
+    });
+
+    loadVehicleTable();
+  }
 });
 
 $(document).on("click", ".btn-delete-vehicle", function () {
