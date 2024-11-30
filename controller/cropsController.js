@@ -293,6 +293,44 @@ async function loadCropTable() {
   }
 }
 
+$("#categoryFilter").change(function () {
+  const selectedCategory = $(this).val();
+  const selectedField = $("#fieldFilter").val();
+  filterCropTable(selectedCategory, selectedField);
+});
+
+$("#fieldFilter").change(function () {
+  const selectedField = $(this).val();
+  const selectedCategory = $("#categoryFilter").val();
+  filterCropTable(selectedCategory, selectedField);
+});
+
+function filterCropTable(selectedCategory = "", selectedField = "") {
+  const rows = $("#cropTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const cropCategory = row.find("td:eq(4)").text().trim();
+    const cropFields = row.find("td:eq(3)").text().trim();
+    let categoryMatch = true;
+    let fieldMatch = true;
+
+    if (selectedCategory) {
+      categoryMatch = cropCategory === selectedCategory;
+    }
+
+    if (selectedField) {
+      fieldMatch = cropFields.includes(selectedField);
+    }
+
+    if (categoryMatch && fieldMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadCropIds() {
   try {
     const cropList = await getAllCrops();
@@ -356,12 +394,26 @@ async function loadFieldIds() {
   const fieldList = await getAllFields();
   const fieldIdDropdown = $(".fieldId");
   fieldIdDropdown.empty();
+
   fieldIdDropdown.append(
     `<option value="" disabled selected>Select Field Ids</option>`
   );
 
   fieldList.forEach((field) => {
     fieldIdDropdown.append(`
+        <option value="${field.fieldId}">${field.fieldId}</option>
+      `);
+  });
+
+  const filterField = $("#fieldFilter");
+  filterField.empty();
+
+  filterField.append(
+    `<option value="" disabled selected>Filter by Field</option>`
+  );
+
+  fieldList.forEach((field) => {
+    filterField.append(`
         <option value="${field.fieldId}">${field.fieldId}</option>
       `);
   });
