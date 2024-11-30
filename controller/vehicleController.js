@@ -197,6 +197,45 @@ async function loadVehicleTable() {
   loadVehicleIds();
 }
 
+$("#categoryFilter").change(function () {
+  const selectedCategory = $(this).val();
+  const selectedStatus = $("#statusFilter").val();
+  filterVehicleTable(selectedCategory, selectedStatus);
+});
+
+$("#statusFilter").change(function () {
+  const selectedStatus = $(this).val();
+  const selectedCategory = $("#categoryFilter").val();
+  filterVehicleTable(selectedCategory, selectedStatus);
+});
+
+function filterVehicleTable(selectedCategory = "", selectedStatus = "") {
+  const rows = $("#vehicleTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const vehicleCategory = row.find("td:eq(1)").text().trim();
+    const vehicleStatus = row.find("td:eq(4)").text().trim();
+
+    let categoryMatch = true;
+    let statusMatch = true;
+
+    if (selectedCategory) {
+      categoryMatch = vehicleCategory === selectedCategory;
+    }
+
+    if (selectedStatus) {
+      statusMatch = vehicleStatus === selectedStatus;
+    }
+
+    if (categoryMatch && statusMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadVehicleIds() {
   try {
     const vehicleList = await getAllVehicles();
