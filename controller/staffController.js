@@ -298,6 +298,44 @@ async function loadStaffTable() {
   loadStaffIds();
 }
 
+$("#designationFilter").change(function () {
+  const selectedDesignation = $(this).val();
+  const selectedGender = $("#genderFilter").val();
+  filterStaffTable(selectedDesignation, selectedGender);
+});
+
+$("#genderFilter").change(function () {
+  const selectedGender = $(this).val();
+  const selectedDesignation = $("#designationFilter").val();
+  filterStaffTable(selectedDesignation, selectedGender);
+});
+
+function filterStaffTable(selectedDesignation = "", selectedGender = "") {
+  const rows = $("#staffTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const designation = row.find("td:eq(2)").text().trim();
+    const gender = row.find("td:eq(4)").text().trim();
+    let designationMatch = true;
+    let genderMatch = true;
+
+    if (selectedDesignation) {
+      designationMatch = designation === selectedDesignation;
+    }
+
+    if (selectedGender) {
+      genderMatch = gender === selectedGender;
+    }
+
+    if (designationMatch && genderMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadStaffIds() {
   try {
     const staffList = await getAllStaff();
