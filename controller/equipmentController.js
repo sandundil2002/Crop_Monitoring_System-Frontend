@@ -198,6 +198,45 @@ async function loadEquipmentTable() {
   }
 }
 
+$("#categoryFilter").change(function () {
+  const selectedCategory = $(this).val();
+  const selectedStaff = $("#staffFilter").val();
+  filterEquipmentTable(selectedCategory, selectedStaff);
+});
+
+$("#staffFilter").change(function () {
+  const selectedStaff = $(this).val();
+  const selectedCategory = $("#categoryFilter").val();
+  filterEquipmentTable(selectedCategory, selectedStaff);
+});
+
+function filterEquipmentTable(selectedCategory = "", selectedStaff = "") {
+  const rows = $("#equipmentTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const equipmentCategory = row.find("td:eq(1)").text().trim();
+    const equipmentStaff = row.find("td:eq(3)").text().trim();
+
+    let categoryMatch = true;
+    let staffMatch = true;
+
+    if (selectedCategory) {
+      categoryMatch = equipmentCategory === selectedCategory;
+    }
+
+    if (selectedStaff) {
+      staffMatch = equipmentStaff === selectedStaff;
+    }
+
+    if (categoryMatch && staffMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadEquipmentIds() {
   try {
     const equipmentList = await getAllEquipments();
@@ -285,6 +324,19 @@ async function loadStaffIds() {
 
   staffList.forEach((staff) => {
     staffDropdown.append(
+      "<option value='" + staff.staffId + "'>" + staff.staffId + "</option>"
+    );
+  });
+
+  const filterStaff = $("#staffFilter");
+  filterStaff.empty();
+
+  filterStaff.append(
+    "<option value='' disabled selected>Filter by Staff</option>"
+  );
+
+  staffList.forEach((staff) => {
+    filterStaff.append(
       "<option value='" + staff.staffId + "'>" + staff.staffId + "</option>"
     );
   });
