@@ -185,6 +185,44 @@ async function loadLogTable() {
   }
 }
 
+$("#dateFilter input").change(function () {
+  const selectedDate = $(this).val();
+  const selectedCropId = $("#cropFilter").val();
+  filterLogTable(selectedDate, selectedCropId);
+});
+
+$("#cropFilter").change(function () {
+  const selectedCropId = $(this).val();
+  const selectedDate = $("#dateFilter input").val();
+  filterLogTable(selectedDate, selectedCropId);
+});
+
+function filterLogTable(selectedDate = "", selectedCropId = "") {
+  const rows = $("#logTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const logDate = row.find("td:eq(7)").text().trim();
+    const cropId = row.find("td:eq(2)").text().trim();
+    let dateMatch = true;
+    let cropMatch = true;
+
+    if (selectedDate) {
+      dateMatch = logDate === selectedDate;
+    }
+
+    if (selectedCropId) {
+      cropMatch = cropId === selectedCropId;
+    }
+
+    if (dateMatch && cropMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadLogIds() {
   const logList = await getAllLogs();
   const logIdDropdown = $("#logList");
@@ -223,12 +261,26 @@ async function loadCropIds() {
   const cropList = await getAllCrops();
   const cropIdDropdown = $(".cropId");
   cropIdDropdown.empty();
+
   cropIdDropdown.append(
     `<option value="" disabled selected>Select Crop Id</option>`
   );
 
   cropList.forEach((crop) => {
     cropIdDropdown.append(`
+            <option value="${crop.cropId}">${crop.cropId}</option>
+        `);
+  });
+
+  const filterCrops = $("#cropFilter");
+  filterCrops.empty();
+
+  filterCrops.append(
+    `<option value="" disabled selected>Filter by Crop</option>`
+  );
+
+  cropList.forEach((crop) => {
+    filterCrops.append(`
             <option value="${crop.cropId}">${crop.cropId}</option>
         `);
   });
