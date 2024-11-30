@@ -328,6 +328,54 @@ async function loadFieldIds() {
   }
 }
 
+$("#staffFilter").change(function () {
+  const selectedStaffId = $(this).val();
+  const selectedSizeRange = $("#sizeFilter").val();
+  filterTable(selectedStaffId, selectedSizeRange);
+});
+
+$("#sizeFilter").change(function () {
+  const selectedSizeRange = $(this).val();
+  const selectedStaffId = $("#staffFilter").val();
+  filterTable(selectedStaffId, selectedSizeRange);
+});
+
+function filterTable(selectedStaffId = "", selectedSizeRange = "") {
+  const rows = $("#fieldTable tr");
+
+  rows.each(function () {
+    const row = $(this);
+    const staffIds = row
+      .find("td:eq(4)")
+      .text()
+      .split(",")
+      .map((id) => id.trim());
+    const sizeValue = parseFloat(row.find("td:eq(3)").text());
+
+    let staffMatch = true;
+    let sizeMatch = true;
+
+    if (selectedStaffId) {
+      staffMatch = staffIds.includes(selectedStaffId);
+    }
+
+    if (selectedSizeRange) {
+      if (selectedSizeRange === "500000+") {
+        sizeMatch = sizeValue > 500000;
+      } else {
+        const [min, max] = selectedSizeRange.split("-").map(Number);
+        sizeMatch = sizeValue >= min && sizeValue <= max;
+      }
+    }
+
+    if (staffMatch && sizeMatch) {
+      row.show();
+    } else {
+      row.hide();
+    }
+  });
+}
+
 async function loadStaffIds() {
   const staffList = await getAllStaff();
   const staffSelect = $(".staffId");
@@ -338,6 +386,18 @@ async function loadStaffIds() {
 
   staffList.forEach((staff) => {
     staffSelect.append(
+      `<option value="${staff.staffId}">${staff.staffId}</option>`
+    );
+  });
+
+  const filterStaff = $("#staffFilter");
+  filterStaff.empty();
+  filterStaff.append(
+    `<option value="" disabled selected>Filter by Staff</option>`
+  );
+
+  staffList.forEach((staff) => {
+    filterStaff.append(
       `<option value="${staff.staffId}">${staff.staffId}</option>`
     );
   });
