@@ -48,7 +48,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="temperature" class="form-label">Temperature</label>
-                            <input type="number" class="form-control" id="temperature" placeholder="Please input field temperature" required>
+                            <input type="number" class="form-control" id="temperature"
+                                placeholder="Please input field temperature" required>
                         </div>
                         <div class="mb-3">
                             <label for="observations" class="form-label">Observation Details</label>
@@ -69,19 +70,28 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-end">
-        <div class="d-flex search-bar">
-            <div class="w-100">
-                <div class="input-group">
-                    <button class="btn btn-outline-success fw-semibold text-start dropdown-toggle w-75 ms-4"
-                        type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Search Log By Id
-                    </button>
-                    <ul class="dropdown-menu w-25" id="logList" aria-labelledby="dropdownMenuButton"></ul>
-                    <button class="btn btn-success" type="button" id="btnSearch">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
+    <div class="container-fluid ">
+        <div class="row g-3 justify-content-between">
+            <div class="col-md-3" id="dateFilter">
+                <input type="text" class="form-control" onfocus="(this.type='date')"
+                    onblur="if(!this.value)this.type='text'" placeholder="Filter by Date">
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-select" id="cropFilter">
+                    <option>Filter by Crop</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 ">
+                <button class="btn btn-outline-success fw-semibold text-start dropdown-toggle rounded-end-0 w-75 ms-4"
+                    type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Search Log By Id
+                </button>
+                <ul class="dropdown-menu" id="logList" aria-labelledby="dropdownMenuButton"></ul>
+                <button class="btn btn-success position-absolute rounded-start-0" type="button" id="btnSearch">
+                    <i class="bi bi-search"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -129,11 +139,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="editTemperature" class="form-label">Temperature</label>
-                            <input type="number" class="form-control" id="editTemperature" placeholder="Please input field temperature" required>
+                            <input type="number" class="form-control" id="editTemperature"
+                                placeholder="Please input field temperature" required>
                         </div>
                         <div class="mb-3">
                             <label for="editObservations" class="form-label">Observation Details</label>
-                            <input type="text" class="form-control text-capitalize" id="editObservations" placeholder="Please input crop observations" required>
+                            <input type="text" class="form-control text-capitalize" id="editObservations"
+                                placeholder="Please input crop observations" required>
                         </div>
                         <div class="mb-3">
                             <label for="editObservedImg" class="form-label">Observed Image </label>
@@ -143,7 +155,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" form="editLogForm" class="btn btn-success" id="btnUpdate">Save Changes</button>
+                    <button type="submit" form="editLogForm" class="btn btn-success" id="btnUpdate">Save
+                        Changes</button>
                 </div>
             </div>
         </div>

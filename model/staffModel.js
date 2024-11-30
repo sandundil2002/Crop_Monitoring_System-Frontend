@@ -95,7 +95,7 @@ export function updateStaff(staffId, staffData) {
     contentType: "application/json",
     data: JSON.stringify(staffData),
     headers: {
-      Authorization: `Bearer ` + token,
+      Authorization: "Bearer " + token,
     },
 
     success: function () {
