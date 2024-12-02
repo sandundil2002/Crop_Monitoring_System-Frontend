@@ -11,7 +11,7 @@ h3 {
 }
 
 #mainContentFrame {
-    height: 90vh;
+    height: 100vh;
 }
 
 @media (max-width: 767px) {

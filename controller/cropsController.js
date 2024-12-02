@@ -18,12 +18,28 @@ const cropScientificNames = {
   Cassava: "Manihot esculenta",
 };
 
+const cropTypes = {
+  Rice: "Cereal",
+  Cowpea: "Legume",
+  GreenGram: "Legume",
+  Chickpea: "Legume",
+  SweetPotato: "Vegetable",
+  Reddish: "Vegetable",
+  Cassava: "Vegetable"
+};
+
 $(document).ready(function () {
   if (checkTokenValidity()) {
     $(".cropCommonName").on("change", function () {
       const selectedCommonName = $(this).val();
       const scientificName = cropScientificNames[selectedCommonName];
       $(".cropScientificName").val(scientificName);
+    });
+
+    $(".cropCommonName").on("change", function () {
+      const selectedCommonName = $(this).val();
+      const type = cropTypes[selectedCommonName];
+      $(".cropType").val(type);
     });
 
     let selectedFields = [];
