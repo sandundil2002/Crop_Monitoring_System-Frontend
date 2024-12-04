@@ -45,6 +45,7 @@ $(".staffId").change(function () {
       </li>
     `);
 
+    
     $("#updatedFieldsList").append(`
             <li data-value="${value}">
                 ${text}
@@ -70,6 +71,10 @@ $(document).ready(function () {
       const fieldStaff = selectedFields;
       const fieldImg1 = $("#fieldImg1").prop("files")[0];
       const fieldImg2 = $("#fieldImg2").prop("files")[0];
+
+      if (fieldImg1.files.length === 0 && fieldImg2.files.length === 0) {
+        swal("Error", "Both images must be uploaded.", "error");
+      }
 
       const fieldData = {
         fieldName: fieldName,
@@ -99,6 +104,10 @@ $(document).ready(function () {
       const fieldStaff = selectedFields;
       const fieldImg1 = $("#editFieldImg1").prop("files")[0];
       const fieldImg2 = $("#editFieldImg2").prop("files")[0];
+
+      if (!fieldImg1 && !fieldImg2) {
+        swal("Error", "Both images must be uploaded.", "error");
+      }
 
       const fieldData = {
         fieldName: fieldName,

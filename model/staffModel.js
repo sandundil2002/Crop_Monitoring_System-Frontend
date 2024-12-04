@@ -80,6 +80,8 @@ export function saveStaff(staff) {
           "You are not authorized to perform this action!",
           "warning"
         );
+      } else if (xhr.status === 400) {
+        swal("Warning!", "This vehicle is not available!", "warning");
       } else {
         console.log(xhr);
         swal("Error!", "Staff Saved Failed", "error");
@@ -109,6 +111,8 @@ export function updateStaff(staffId, staffData) {
           "You are not authorized to perform this action!",
           "warning"
         );
+      } else if (xhr.status === 400) {
+        swal("Warning!", "This vehicle is not available!", "warning");
       } else {
         console.log(error);
         swal("Error!", "Staff Update Failed", "error");

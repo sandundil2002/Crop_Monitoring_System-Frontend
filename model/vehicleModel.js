@@ -139,6 +139,12 @@ export function deleteVehicle(vehicleId) {
           "You are not authorized to perform this action!",
           "warning"
         );
+      } else if (xhr.status === 400) {
+        swal(
+          "Warning!",
+          "Vehicle is assigned to a staff. Cannot delete this vehicle!",
+          "warning"
+        );
       } else {
         console.log(xhr);
         swal("Error!", "Vehicle Delete Failed!", "error");

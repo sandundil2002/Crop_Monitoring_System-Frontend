@@ -14,14 +14,12 @@ $(document).ready(function () {
       const category = $("#category").val();
       const numberPlate = $("#licensePlate").val();
       const fuelType = $("#fuelType").val();
-      const status = $("#status").val();
       const remarks = $("#remarks").val();
 
       const vehicleData = {
         category: category,
         numberPlate: numberPlate,
         fuelType: fuelType,
-        status: status,
         remarks: remarks,
       };
 

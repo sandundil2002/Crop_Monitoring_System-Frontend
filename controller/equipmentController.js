@@ -16,14 +16,12 @@ $(document).ready(function () {
       const type = $("#type").val();
       const staff = $("#assignStaff").val();
       const field = $("#assignField").val();
-      const status = $("#status").val();
 
       const equipmentData = {
         category: category,
         type: type,
         eqStaff: staff,
         eqField: field,
-        status: status,
       };
 
       const promise = saveEquipment(equipmentData);
