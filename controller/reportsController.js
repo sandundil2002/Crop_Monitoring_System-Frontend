@@ -1,4 +1,8 @@
-import { getCropsBySeason } from "../model/reportsModel.js";
+import {
+  getCropsBySeason,
+  getAllVehicles,
+  getAllEquipments,
+} from "../model/reportsModel.js";
 
 $(document).ready(async function () {
   const seasons = [
@@ -18,6 +22,9 @@ $(document).ready(async function () {
       console.error(`Error fetching crops for ${season.name}:`, error);
     }
   }
+
+  vehicleChart();
+  equipmentChart();
 });
 
 function generateFlipCard(season, crops) {
@@ -41,4 +48,110 @@ function generateFlipCard(season, crops) {
             </div>
         </div>
     `;
+}
+
+async function vehicleChart() {
+  const vehicles = await getAllVehicles();
+
+  const categoryCounts = vehicles.reduce((counts, vehicle) => {
+    counts[vehicle.category] = (counts[vehicle.category] || 0) + 1;
+    return counts;
+  }, {});
+
+  const labels = Object.keys(categoryCounts);
+  const data = Object.values(categoryCounts);
+
+  const ctx = document.getElementById("vehicleCategoryChart").getContext("2d");
+  const vehicleCategoryChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Vehicle Categories",
+          data: data,
+          backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF9F40",
+            "#E7E9ED",
+            "#C9CBCF",
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+          labels: {
+            font: {
+              size: 20,
+            },
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+    },
+  });
+}
+
+async function equipmentChart() {
+  const equipment = await getAllEquipments();
+
+  const categoryCounts = equipment.reduce((counts, item) => {
+    counts[item.category] = (counts[item.category] || 0) + 1;
+    return counts;
+  }, {});
+
+  const labels = Object.keys(categoryCounts);
+  const data = Object.values(categoryCounts);
+
+  const ctx = document
+    .getElementById("equipmentCategoryChart")
+    .getContext("2d");
+  const equipmentCategoryChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Equipment Categories",
+          data: data,
+          backgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF9F40",
+            "#E7E9ED",
+            "#C9CBCF",
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+          labels: {
+            font: {
+              size: 20,
+            },
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+    },
+  });
 }

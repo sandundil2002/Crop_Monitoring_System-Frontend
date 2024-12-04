@@ -50,6 +50,7 @@ $(document).ready(function () {
       .then((response) => {
         if (response && response.token) {
           localStorage.setItem("authToken", response.token);
+          localStorage.setItem("username", userData.email)
           window.location.href = "../pages/dashboard.html";
         }
       })
@@ -80,6 +81,7 @@ $(document).ready(function () {
         if (response && response.token) {
           swal("Confirmation!", "User Registration Successfully!", "success");
           localStorage.setItem("authToken", response.token);
+          localStorage.setItem("username", email);
           window.location.href = "../pages/dashboard.html";
         }
       })

@@ -1,8 +1,30 @@
-import { getAllCrops, getAllFields } from "../model/mainFrameModel.js";
+import {
+  getAllCrops,
+  getAllFields,
+  getAllStaff,
+} from "../model/mainFrameModel.js";
 
 $(document).ready(async function () {
+  const user = localStorage.getItem("username");
   const fields = await getAllFields();
   const crops = await getAllCrops();
+  const staff = await getAllStaff();
+
+  $("#cropCount").text(crops.length);
+  $("#fieldCount").text(fields.length);
+  $("#staffCount").text(staff.length);
+
+  const staffMember = staff.find((staff) => staff.email === user);
+  console.log(staffMember);
+
+  if (staffMember) {
+    const username = staffMember.firstName + " " + staffMember.lastName;
+    const userRole = staffMember.role;
+    $("#userName").text(username);
+    $("#role").text(userRole);
+  } else {
+    console.log("User not found in the staff list.");
+  }
 
   const fieldLabels = fields.map((field) => field.fieldName);
 
@@ -25,7 +47,7 @@ $(document).ready(async function () {
 
   const data = {
     labels: fieldLabels,
-    datasets: datasets, 
+    datasets: datasets,
   };
 
   const config = {
@@ -41,7 +63,7 @@ $(document).ready(async function () {
           enabled: true,
         },
       },
-      
+
       scales: {
         y: {
           beginAtZero: true,
