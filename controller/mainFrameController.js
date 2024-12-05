@@ -2,6 +2,10 @@ import {
   getAllCrops,
   getAllFields,
   getAllStaff,
+  sendOtp,
+  verifyOtp,
+  updateUser,
+  deleteUser,
 } from "../model/mainFrameModel.js";
 
 $(document).ready(async function () {
@@ -20,8 +24,8 @@ $(document).ready(async function () {
   if (staffMember) {
     const username = staffMember.firstName + " " + staffMember.lastName;
     const userRole = staffMember.role;
-    $("#userName").text(username);
-    $("#role").text(userRole);
+    $(".userName").text(username);
+    $(".role").text(userRole);
   } else {
     console.log("User not found in the staff list.");
   }
@@ -111,3 +115,79 @@ function getCategoryBorderColor(category) {
       return "rgba(201, 203, 207, 1)";
   }
 }
+
+$("#otpGet").click(function () {
+  const email = localStorage.getItem("username");
+
+  const otpData = { email: email };
+  const promise = sendOtp(otpData);
+
+  promise
+    .then(() => {
+      swal(
+        "OTP Sent!",
+        "An OTP has been sent to your email. Please verify it.",
+        "info"
+      );
+    })
+    .catch(() => {
+      swal("Error!", "Failed to send OTP. Please try again.", "error");
+    });
+});
+
+$("#updateUser").click(function () {
+  const otp = $("#otpCode").val();
+
+  if (!otp) {
+    swal("Warning!", "Please enter the OTP!", "info");
+    return;
+  }
+
+  const email = localStorage.getItem("username");
+  const newPassword = $("#confirmPassword").val();
+
+  const otpData = { email: email, otp: otp };
+  const userData = { email: email, password: newPassword };
+
+  const promise = verifyOtp(otpData);
+  promise
+    .then(() => {
+      updateUser(email, userData);
+    })
+    .catch(() => {
+      swal("Error!", "Invalid OTP. Please try again.", "error");
+    });
+});
+
+$("#deleteAccountBtn").click(function () {
+  const email = localStorage.getItem("username");
+  const otp = $("#otpCode").val();
+  const otpData = { email: email, otp: otp };
+  const promise = verifyOtp(otpData);
+  promise
+    .then(() => {
+      swal({
+        title: "Are you sure?",
+        text: `Do you want to delete this user account`,
+        icon: "warning",
+        buttons: {
+          cancel: "Cancel",
+          confirm: {
+            text: "Delete",
+            visible: true,
+            className: "btn-danger",
+          },
+        },
+      }).then((willDelete) => {
+        if (willDelete) {
+          const promise = deleteUser(email);
+          promise.then(() => {
+            window.location = "./index.html";
+          });
+        }
+      });
+    })
+    .catch(() => {
+      swal("Error!", "Invalid OTP. Please try again.", "error");
+    });
+});

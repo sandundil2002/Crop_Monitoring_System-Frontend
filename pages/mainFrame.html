@@ -55,14 +55,59 @@
                 </div>
             </div>
 
-            <div class="profile-card d-flex bg-success-subtle">
+            <!-- Profile Card -->
+            <div class="profile-card d-flex bg-success-subtle" data-bs-toggle="offcanvas"
+                data-bs-target="#profileOffcanvas">
                 <img src="../assets/images/dashboard/avatar.jpg" class="profile-image">
                 <div class="profile-info mt-2">
-                    <h3 class="profile-name ms-2 text-capitalize" id="userName"></h3>
-                    <p class="profile-title " id="role">UI/UX Designer</p>
+                    <h3 class="profile-name ms-2 text-capitalize userName">John Doe</h3>
+                    <p class="profile-title role">UI/UX Designer</p>
                 </div>
             </div>
 
+            <!-- Offcanvas for Profile Actions -->
+            <div class="offcanvas offcanvas-end bg-secondary-subtle" tabindex="-1" id="profileOffcanvas"
+                aria-labelledby="profileOffcanvasLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="profileOffcanvasLabel">User Profile</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body text-center">
+                    <img src="../assets/images/dashboard/avatar.jpg" class="profile-image rounded-circle mb-3"
+                        style="width: 100px; height: 100px;">
+                    <div class="profile-info">
+                        <h3 class="profile-name text-capitalize userName">John Doe</h3>
+                        <p class="profile-title role">UI/UX Designer</p>
+                    </div>
+                
+                    <!-- Password Fields and OTP Verification -->
+                    <div id="passwordChangeForm" class="mt-4">
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Re-enter new password"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 mb-3" id="otpGet">Get OTP</button>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="otpCode" placeholder="Enter OTP" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="updateUser">Update Password</button>
+                    </div>
+                
+                    <div class="mt-4">
+                        <button class="btn btn-danger w-100" id="deleteAccountBtn">Delete Account</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
