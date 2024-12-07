@@ -72,10 +72,6 @@ $(document).ready(function () {
       const fieldImg1 = $("#fieldImg1").prop("files")[0];
       const fieldImg2 = $("#fieldImg2").prop("files")[0];
 
-      if (fieldImg1.files.length === 0 && fieldImg2.files.length === 0) {
-        swal("Error", "Both images must be uploaded.", "error");
-      }
-
       const fieldData = {
         fieldName: fieldName,
         location: fieldLocation,
@@ -88,7 +84,7 @@ $(document).ready(function () {
       saveField(fieldData)
         .then(() => {
           loadFieldTable().then(() => {
-            $("addCropModal").modal("hide");
+            $("#addCropModal").modal("hide");
           });
         })
         .catch((error) => {
@@ -280,7 +276,7 @@ async function loadFieldTable() {
         : "images/placeholder.png";
 
       const location = field.location
-        ? `${field.location.x}, ${field.location.y}`
+        ? `${"X: " + field.location.x}<br>${"Y: " + field.location.y}`
         : "N/A";
 
       fieldTable.append(`

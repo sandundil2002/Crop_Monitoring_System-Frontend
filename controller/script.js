@@ -169,6 +169,6 @@ function signup() {
       }
     })
     .catch(() => {
-      swal("Error!", "Registration failed. Please try again.", "error");
+      swal("Error!", "This email has no access to signup", "error");
     });
 }
